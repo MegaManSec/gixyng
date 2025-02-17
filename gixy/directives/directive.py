@@ -46,12 +46,12 @@ class Directive:
     def variables(self):
         raise NotImplementedError()
 
-    def find_directive_in_scope(self, name):
-        """Find directive in the current scope"""
+    def find_directives_in_scope(self, name):
+        """Find directives in the current scope"""
         for parent in self.parents:
             directive = parent.some(name, flat=False)
             if directive:
-                return directive
+                yield directive
         return None
 
     def __str__(self):

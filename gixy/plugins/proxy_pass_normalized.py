@@ -1,5 +1,6 @@
 import re
 import gixy
+import sys
 from gixy.plugins.plugin import Plugin
 
 class proxy_pass_normalized(Plugin):
@@ -12,7 +13,7 @@ class proxy_pass_normalized(Plugin):
     """
 
     summary = 'Detect path after host in proxy_pass (potential URL decoding issue)'
-    severity = gixy.severity.LOW
+    severity = gixy.severity.MEDIUM
     description = ("A slash immediately after the host in proxy_pass leads to the path being decoded and normalized before proxying downstream, leading to unexpected behavior related to encoded slashes.")
     help_url = 'https://joshua.hu/proxy-pass-nginx-decoding-normalizing-url-path-dangerous#nginx-proxy_pass'
     directives = ['proxy_pass']
@@ -22,11 +23,12 @@ class proxy_pass_normalized(Plugin):
         self.parse_uri_re = re.compile(r'(?P<scheme>[^?#/)]+://)?(?P<host>[^?#/)]+)(?P<path>/.*)?')
 
     def audit(self, directive):
-        proxy_pass_arg = directive.args[0]
-        if not proxy_pass_arg:
+        proxy_pass_args = directive.args
+
+        if not proxy_pass_args:
             return
 
-        parsed = self.parse_uri_re.match(proxy_pass_arg)
+        parsed = self.parse_uri_re.match(proxy_pass_args[0])
 
         if not parsed:
             return
@@ -34,11 +36,17 @@ class proxy_pass_normalized(Plugin):
         if not parsed.group('path'):
             return
 
+
+        for rewrite in directive.find_directives_in_scope("rewrite"):
+            if hasattr(rewrite, 'pattern') and hasattr(rewrite, 'replace'):
+                if rewrite.pattern == '^' and rewrite.replace == '$request_uri':
+                    return
+
         self.add_issue(
             severity=self.severity,
             directive=[directive, directive.parent],
             reason=(
-                "Found a slash (and possibly more) after the hostname in proxy_pass. "
+                "Found a slash (and possibly more) after the hostname in proxy_pass, without using $request_uri."
                 "This can lead to path decoding issues."
             )
         )
