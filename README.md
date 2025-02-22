@@ -148,6 +148,53 @@ Total issues:
     High: 0
 
 ```
+## Kubernetes usage
+Given you are using the official NGINX ingress controller, not the kubernetes one, you can use this
+https://github.com/nginx/kubernetes-ingress
+
+```
+kubectl exec -it my-release-nginx-ingress-controller-54d96cb5cd-pvhx5 -- /bin/bash -c "cat /etc/nginx/conf.d/*" | docker run -i getpagespeed/gixy -
+```
+
+```
+==================== Results ===================
+
+>> Problem: [version_disclosure] Do not enable server_tokens on or server_tokend build
+Severity: HIGH
+Description: Using server_tokens on; or server_tokens build;  allows an attacker to learn the version of NGINX you are running, which can be used to exploit known vulnerabilities.
+Additional info: https://gixy.getpagespeed.com/en/plugins/version_disclosure/
+Reason: Using server_tokens value which promotes information disclosure
+Pseudo config:
+
+server {
+	server_name XXXXX.dev;
+	server_tokens on;
+}
+
+server {
+	server_name XXXXX.dev;
+	server_tokens on;
+}
+
+server {
+	server_name XXXXX.dev;
+	server_tokens on;
+}
+
+server {
+	server_name XXXXX.dev;
+	server_tokens on;
+}
+
+==================== Summary ===================
+Total issues:
+    Unspecified: 0
+    Low: 0
+    Medium: 0
+    High: 4
+
+```
+
 
 # Contributing
 Contributions to Gixy are always welcome! You can help us in different ways:
