@@ -38,8 +38,10 @@ Right now Gixy can find:
 *   [[add_header_content_type] Setting Content-Type via add_header](https://github.com/dvershinin/gixy/blob/master/docs/en/plugins/add_header_content_type.md)
 *   [[resolver_external] Using external DNS nameservers](https://blog.zorinaq.com/nginx-resolver-vulns/)
 *   [[version_disclosure] Using insecure values for server_tokens](https://github.com/dvershinin/gixy/blob/master/docs/en/plugins/version_disclosure.md)
-*   [[try_files_is_evil_too] The try_files directive is evil without open_file_cache](https://www.getpagespeed.com/server-setup/nginx-try_files-is-evil-too)
-*   [[proxy_pass_normalized] proxy_pass will decode and normalize paths when specified with a path](https://joshua.hu/proxy-pass-nginx-decoding-normalizing-url-path-dangerous#nginx-proxy_pass)
+*   [[try_files_is_evil_too] The `try_files` directive is evil without open_file_cache](https://www.getpagespeed.com/server-setup/nginx-try_files-is-evil-too)
+*   [[proxy_pass_normalized] `proxy_pass` will decode and normalize paths when specified with a path](https://joshua.hu/proxy-pass-nginx-decoding-normalizing-url-path-dangerous#nginx-proxy_pass)
+*   [[worker_rlimit_nofile_vs_connections] `worker_rlimit_nofile` must be at least twice `worker_connections`](https://gixy.getpagespeed.com/en/plugins/worker_rlimit_nofile_vs_connections/)
+*   [[error_log_off] `error_log` set to `off`](https://gixy.getpagespeed.com/en/plugins/error_log_off/)
 
 You can find things that Gixy is learning to detect at [Issues labeled with "new plugin"](https://github.com/dvershinin/gixy/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+plugin%22)
 
