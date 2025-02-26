@@ -77,9 +77,51 @@ class AddHeaderDirective(Directive):
         super(AddHeaderDirective, self).__init__(name, args)
         self.header = args[0].lower()
         self.value = args[1]
+        self.headers = {self.header: self.value}
         self.always = False
         if len(args) > 2 and args[2] == "always":
             self.always = True
+
+
+class MoreSetHeadersDirective(Directive):
+    """
+    Syntax:	more_set_headers 'Foo: bar' 'Baz: bah';
+    """
+
+    nginx_name = "more_set_headers"
+
+    def get_headers(self):
+        # See headers more documentation: https://github.com/openresty/headers-more-nginx-module#description
+        result = {}
+        skip_next = False
+        for arg in self.args:
+            if arg in ["-s", "-t"]:
+                # Mark to skip the next value because it's not a header
+                skip_next = True
+            elif arg.startswith("-"):
+                # Skip any options
+                continue
+            elif skip_next:
+                skip_next = False
+            elif not skip_next:
+                # Now it's a header in format "Header: value" or "Header:" or just "Header" (for clearing)
+                parts = arg.split(":", 1)
+                header = parts[0]
+                value = None
+                if len(parts) > 1 and parts[1].strip():
+                    # strip only whitespace character from left side, preserving newlines
+                    # this is needed to support multiline headers
+                    value = parts[1].lstrip(" ")
+                result[header] = value
+        return result
+
+    def __init__(self, name, args):
+        super().__init__(name, args)
+        self.headers = self.get_headers()
+        # first header is the main header name
+        self.header = list(self.headers.keys())[0]
+        # value is
+        self.value = self.headers[self.header]
 
 
 class SetDirective(Directive):

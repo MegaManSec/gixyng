@@ -1,4 +1,5 @@
 import gixy
+from gixy.directives.directive import AddHeaderDirective
 from gixy.plugins.plugin import Plugin
 
 
@@ -20,41 +21,19 @@ class add_header_multiline(Plugin):
     help_url = "https://github.com/dvershinin/gixy/blob/master/docs/en/plugins/addheadermultiline.md"
     directives = ["add_header", "more_set_headers"]
 
-    def audit(self, directive):
-        header_values = get_header_values(directive)
-        for value in header_values:
+    def audit(self, directive: AddHeaderDirective):
+        for header, value in directive.headers.items():
             if "\n\x20" in value or "\n\t" in value:
                 self.add_issue(directive=directive)
                 break
             if "\n" in value:
                 reason = (
-                    'A newline character is found in the directive "{directive}". The resulting header will be '
+                    'A newline character is found in the directive "{directive}". The resulting header {header} will be '
                     "incomplete. Ensure the value is fit on a single line".format(
-                        directive=directive.name
+                        directive=directive.name, header=header
                     )
                 )
                 self.add_issue(
                     severity=gixy.severity.HIGH, directive=directive, reason=reason
                 )
                 break
-
-
-def get_header_values(directive):
-    if directive.name == "add_header":
-        return [directive.args[1]]
-
-    # See headers more documentation: https://github.com/openresty/headers-more-nginx-module#description
-    result = []
-    skip_next = False
-    for arg in directive.args:
-        if arg in ["-s", "-t"]:
-            # Skip the next value because it's not a header
-            skip_next = True
-        elif arg.startswith("-"):
-            # Skip any options
-            pass
-        elif skip_next:
-            skip_next = False
-        elif not skip_next:
-            result.append(arg)
-    return result

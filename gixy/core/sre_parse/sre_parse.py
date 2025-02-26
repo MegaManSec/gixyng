@@ -138,7 +138,7 @@ class SubPattern:
             if op is BRANCH:
                 i = MAXREPEAT - 1
                 j = 0
-                for av in av[1]:
+                for _ in av[1]:
                     l, h = av.getwidth()
                     i = min(i, l)
                     j = max(j, h)
@@ -166,7 +166,9 @@ class SubPattern:
 
 
 class Tokenizer:
+
     def __init__(self, string):
+        self.next = None
         self.string = string
         self.index = 0
         self.__next()
@@ -753,11 +755,6 @@ def parse_template(source, pattern):
         else:
             pappend((LITERAL, literal))
 
-    sep = source[:0]
-    if type(sep) is type(""):
-        makechar = chr
-    else:
-        makechar = unichr
     while 1:
         this = sget()
         if this is None:
@@ -795,7 +792,7 @@ def parse_template(source, pattern):
                     this = this + sget()
                     if s.next in OCTDIGITS:
                         this = this + sget()
-                literal(makechar(int(this[1:], 8) & 0xFF))
+                literal(chr(int(this[1:], 8) & 0xFF))
             elif c in DIGITS:
                 isoctal = False
                 if s.next in DIGITS:
@@ -803,12 +800,12 @@ def parse_template(source, pattern):
                     if c in OCTDIGITS and this[2] in OCTDIGITS and s.next in OCTDIGITS:
                         this = this + sget()
                         isoctal = True
-                        literal(makechar(int(this[1:], 8) & 0xFF))
+                        literal(chr(int(this[1:], 8) & 0xFF))
                 if not isoctal:
                     a((MARK, int(this[1:])))
             else:
                 try:
-                    this = makechar(ESCAPES[this][1])
+                    this = chr(ESCAPES[this][1])
                 except KeyError:
                     pass
                 literal(this)
