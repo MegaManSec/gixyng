@@ -3,6 +3,7 @@ import logging
 import re
 import random
 import itertools
+
 try:
     from cached_property import cached_property
 except ImportError:
@@ -30,24 +31,26 @@ CATEGORIES = {
     sre_parse.CATEGORY_NOT_SPACE: _build_reverse_list(sre_parse.WHITESPACE),
     sre_parse.CATEGORY_DIGIT: sre_parse.DIGITS,
     sre_parse.CATEGORY_NOT_DIGIT: _build_reverse_list(sre_parse.DIGITS),
-    sre_parse.CATEGORY_WORD: frozenset('abcdefghijklmnopqrstuvwxyz'
-                                       'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                                       '0123456789_'),
-    sre_parse.CATEGORY_NOT_WORD: _build_reverse_list(frozenset('abcdefghijklmnopqrstuvwxyz'
-                                                               'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                                                               '0123456789_')),
-    sre_parse.CATEGORY_LINEBREAK: frozenset('\n'),
-    sre_parse.CATEGORY_NOT_LINEBREAK: _build_reverse_list(frozenset('\n')),
-    'ANY': [six.unichr(x) for x in range(1, 127) if x != 10]
+    sre_parse.CATEGORY_WORD: frozenset(
+        "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "0123456789_"
+    ),
+    sre_parse.CATEGORY_NOT_WORD: _build_reverse_list(
+        frozenset(
+            "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "0123456789_"
+        )
+    ),
+    sre_parse.CATEGORY_LINEBREAK: frozenset("\n"),
+    sre_parse.CATEGORY_NOT_LINEBREAK: _build_reverse_list(frozenset("\n")),
+    "ANY": [six.unichr(x) for x in range(1, 127) if x != 10],
 }
 
 CATEGORIES_NAMES = {
-    sre_parse.CATEGORY_DIGIT: r'\d',
-    sre_parse.CATEGORY_NOT_DIGIT: r'\D',
-    sre_parse.CATEGORY_SPACE: r'\s',
-    sre_parse.CATEGORY_NOT_SPACE: r'\S',
-    sre_parse.CATEGORY_WORD: r'\w',
-    sre_parse.CATEGORY_NOT_WORD: r'\W',
+    sre_parse.CATEGORY_DIGIT: r"\d",
+    sre_parse.CATEGORY_NOT_DIGIT: r"\D",
+    sre_parse.CATEGORY_SPACE: r"\s",
+    sre_parse.CATEGORY_NOT_SPACE: r"\S",
+    sre_parse.CATEGORY_WORD: r"\w",
+    sre_parse.CATEGORY_NOT_WORD: r"\W",
 }
 
 
@@ -78,7 +81,7 @@ def extract_groups(parsed, top=True):
 
 
 def _gen_combinator(variants, _merge=True):
-    if not hasattr(variants, '__iter__'):
+    if not hasattr(variants, "__iter__"):
         return [variants] if variants is not None else []
 
     res = []
@@ -109,7 +112,7 @@ def _merge_variants(variants):
             result.append(_merge_variants(var))
         else:
             result.append(var)
-    return ''.join(result)
+    return "".join(result)
 
 
 class Token(object):
@@ -138,41 +141,41 @@ class Token(object):
         self.regexp.reg_group(gid, self)
 
     def can_contain(self, char, skip_literal=True):
-        raise NotImplementedError('can_contain must be implemented')
+        raise NotImplementedError("can_contain must be implemented")
 
     def can_startswith(self, char, strict=False):
         return self.can_contain(char, skip_literal=False)
 
     def must_contain(self, char):
-        raise NotImplementedError('must_contain must be implemented')
+        raise NotImplementedError("must_contain must be implemented")
 
     def must_startswith(self, char, strict=False):
         return self.must_contain(char)
 
     def generate(self, context):
-        raise NotImplementedError('generate must be implemented')
+        raise NotImplementedError("generate must be implemented")
 
     def __str__(self):
-        raise NotImplementedError('__str__ must be implemented')
+        raise NotImplementedError("__str__ must be implemented")
 
 
 class AnyToken(Token):
     type = sre_parse.ANY
 
     def can_contain(self, char, skip_literal=True):
-        return char in CATEGORIES['ANY']
+        return char in CATEGORIES["ANY"]
 
     def must_contain(self, char, skip_literal=True):
         # Char may not be present in ANY token
         return False
 
     def generate(self, context):
-        if context.char in CATEGORIES['ANY']:
+        if context.char in CATEGORIES["ANY"]:
             return context.char
-        return 'a'
+        return "a"
 
     def __str__(self):
-        return '.'
+        return "."
 
 
 class LiteralToken(Token):
@@ -217,7 +220,7 @@ class NotLiteralToken(Token):
         return random.choice(self.gen_char_list)
 
     def __str__(self):
-        return '[^{char}]'.format(char=self.char)
+        return "[^{char}]".format(char=self.char)
 
 
 class RangeToken(Token):
@@ -242,14 +245,14 @@ class RangeToken(Token):
         return six.unichr(random.randint(self.token[1][0], self.token[1][1]))
 
     def __str__(self):
-        return '{left}-{right}'.format(left=self.left, right=self.right)
+        return "{left}-{right}".format(left=self.left, right=self.right)
 
 
 class CategoryToken(Token):
     type = sre_parse.CATEGORY
 
     def _parse(self):
-        self.char_list = CATEGORIES.get(self.token[1], [''])
+        self.char_list = CATEGORIES.get(self.token[1], [""])
 
     def can_contain(self, char, skip_literal=True):
         return char in self.char_list
@@ -265,7 +268,7 @@ class CategoryToken(Token):
             return c
 
     def __str__(self):
-        return CATEGORIES_NAMES.get(self.token[1], '\\C')
+        return CATEGORIES_NAMES.get(self.token[1], "\\C")
 
 
 class MinRepeatToken(Token):
@@ -318,7 +321,7 @@ class MinRepeatToken(Token):
         res = []
         if self.min == 0:
             # [a-z]*
-            res.append('')
+            res.append("")
         if self.max == 0:
             # [a-z]{0}
             return res
@@ -333,16 +336,18 @@ class MinRepeatToken(Token):
         return result
 
     def __str__(self):
-        childs = ''.join(str(x) for x in self.childs)
+        childs = "".join(str(x) for x in self.childs)
         if self.min == self.max:
-            return '{childs}{{{count}}}?'.format(childs=childs, count=self.min)
+            return "{childs}{{{count}}}?".format(childs=childs, count=self.min)
         if self.min == 0 and self.max == 1:
-            return '{childs}?'.format(childs=childs)
+            return "{childs}?".format(childs=childs)
         if self.min == 0 and self.max == sre_parse.MAXREPEAT:
-            return '{childs}*?'.format(childs=childs)
+            return "{childs}*?".format(childs=childs)
         if self.min == 1 and self.max == sre_parse.MAXREPEAT:
-            return '{childs}+?'.format(childs=childs)
-        return '{childs}{{{min},{max}}}?'.format(childs=childs, min=self.min, max=self.max)
+            return "{childs}+?".format(childs=childs)
+        return "{childs}{{{min},{max}}}?".format(
+            childs=childs, min=self.min, max=self.max
+        )
 
 
 class MaxRepeatToken(Token):
@@ -395,7 +400,7 @@ class MaxRepeatToken(Token):
         res = []
         if self.min == 0:
             # [a-z]*
-            res.append('')
+            res.append("")
         if self.max == 0:
             # [a-z]{0}
             return res
@@ -410,16 +415,18 @@ class MaxRepeatToken(Token):
         return result
 
     def __str__(self):
-        childs = ''.join(str(x) for x in self.childs)
+        childs = "".join(str(x) for x in self.childs)
         if self.min == self.max:
-            return '{childs}{{{count}}}'.format(childs=childs, count=self.min)
+            return "{childs}{{{count}}}".format(childs=childs, count=self.min)
         if self.min == 0 and self.max == 1:
-            return '{childs}?'.format(childs=childs)
+            return "{childs}?".format(childs=childs)
         if self.min == 0 and self.max == sre_parse.MAXREPEAT:
-            return '{childs}*'.format(childs=childs)
+            return "{childs}*".format(childs=childs)
         if self.min == 1 and self.max == sre_parse.MAXREPEAT:
-            return '{childs}+'.format(childs=childs)
-        return '{childs}{{{min},{max}}}'.format(childs=childs, min=self.min, max=self.max)
+            return "{childs}+".format(childs=childs)
+        return "{childs}{{{min},{max}}}".format(
+            childs=childs, min=self.min, max=self.max
+        )
 
 
 class BranchToken(Token):
@@ -429,11 +436,17 @@ class BranchToken(Token):
         self.childs = []
         for token in self.token[1][1]:
             if not token:
-                self.childs.append(EmptyToken(token=token, parent=self.parent, regexp=self.regexp))
+                self.childs.append(
+                    EmptyToken(token=token, parent=self.parent, regexp=self.regexp)
+                )
             elif isinstance(token, sre_parse.SubPattern):
-                self.childs.append(InternalSubpatternToken(token=token, parent=self.parent, regexp=self.regexp))
+                self.childs.append(
+                    InternalSubpatternToken(
+                        token=token, parent=self.parent, regexp=self.regexp
+                    )
+                )
             else:
-                raise RuntimeError('Unexpected token {0} in branch'.format(token))
+                raise RuntimeError("Unexpected token {0} in branch".format(token))
 
     def can_contain(self, char, skip_literal=True):
         for child in self.childs:
@@ -462,7 +475,7 @@ class BranchToken(Token):
         return res
 
     def __str__(self):
-        return '(?:{0})'.format('|'.join(str(x) for x in self.childs))
+        return "(?:{0})".format("|".join(str(x) for x in self.childs))
 
 
 class SubpatternToken(Token):
@@ -496,9 +509,11 @@ class SubpatternToken(Token):
                         continue
                     return can
             return False
-        elif not strict and not isinstance(self.childs[0], (SubpatternToken, InternalSubpatternToken)):
+        elif not strict and not isinstance(
+            self.childs[0], (SubpatternToken, InternalSubpatternToken)
+        ):
             # Not strict regexp w/o ^ can starts with any character
-            return char in CATEGORIES['ANY']
+            return char in CATEGORIES["ANY"]
 
         for child in self.childs:
             can = child.can_startswith(char, strict)
@@ -516,7 +531,9 @@ class SubpatternToken(Token):
                         continue
                     return must
             return False
-        elif not strict and not isinstance(self.childs[0], (SubpatternToken, InternalSubpatternToken)):
+        elif not strict and not isinstance(
+            self.childs[0], (SubpatternToken, InternalSubpatternToken)
+        ):
             # Not strict regexp w/o ^ MAY NOT starts with any character
             return False
 
@@ -535,10 +552,10 @@ class SubpatternToken(Token):
         return _gen_combinator(res)
 
     def __str__(self):
-        childs = ''.join(str(x) for x in self.childs)
+        childs = "".join(str(x) for x in self.childs)
         if self.group is None:
-            return '(?:{childs})'.format(childs=childs)
-        return '({childs})'.format(childs=childs)
+            return "(?:{childs})".format(childs=childs)
+        return "({childs})".format(childs=childs)
 
 
 class InternalSubpatternToken(Token):
@@ -569,9 +586,11 @@ class InternalSubpatternToken(Token):
                         continue
                     return can
             return False
-        elif not strict and not isinstance(self.childs[0], (SubpatternToken, InternalSubpatternToken)):
+        elif not strict and not isinstance(
+            self.childs[0], (SubpatternToken, InternalSubpatternToken)
+        ):
             # Not strict regexp w/o ^ can starts with any character
-            return char in CATEGORIES['ANY']
+            return char in CATEGORIES["ANY"]
 
         for child in self.childs:
             can = child.can_startswith(char, strict)
@@ -589,7 +608,9 @@ class InternalSubpatternToken(Token):
                         continue
                     return must
             return False
-        elif not strict and not isinstance(self.childs[0], (SubpatternToken, InternalSubpatternToken)):
+        elif not strict and not isinstance(
+            self.childs[0], (SubpatternToken, InternalSubpatternToken)
+        ):
             # Not strict regexp w/o ^ MAY NOT starts with any character
             return False
 
@@ -608,7 +629,7 @@ class InternalSubpatternToken(Token):
         return _gen_combinator(res)
 
     def __str__(self):
-        return ''.join(str(x) for x in self.childs)
+        return "".join(str(x) for x in self.childs)
 
 
 class InToken(Token):
@@ -658,7 +679,10 @@ class InToken(Token):
             elif isinstance(child, LiteralToken):
                 blacklisted.add(child.char)
             elif isinstance(child, RangeToken):
-                blacklisted.update(six.unichr(c) for c in six.moves.range(child.left_code, child.right_code + 1))
+                blacklisted.update(
+                    six.unichr(c)
+                    for c in six.moves.range(child.left_code, child.right_code + 1)
+                )
             elif isinstance(child, CategoryToken):
                 blacklisted.update(child.char_list)
             else:
@@ -680,7 +704,7 @@ class InToken(Token):
         return self._generate_positive(context)
 
     def __str__(self):
-        return '[{childs}]'.format(childs=''.join(str(x) for x in self.childs))
+        return "[{childs}]".format(childs="".join(str(x) for x in self.childs))
 
 
 class AtToken(Token):
@@ -699,17 +723,17 @@ class AtToken(Token):
     def generate(self, context):
         if context.anchored:
             if self.begin:
-                return '^'
+                return "^"
             if self.end:
-                return '$'
+                return "$"
         return None
 
     def __str__(self):
         if self.begin:
-            return '^'
+            return "^"
         if self.end:
-            return '$'
-        LOG.warning('unexpected AT token: %s', self.token)
+            return "$"
+        LOG.warning("unexpected AT token: %s", self.token)
 
 
 class NegateToken(Token):
@@ -731,7 +755,7 @@ class NegateToken(Token):
         return None
 
     def __str__(self):
-        return '^'
+        return "^"
 
 
 class GroupRefToken(Token):
@@ -757,7 +781,7 @@ class GroupRefToken(Token):
         return self.group.generate(context)
 
     def __str__(self):
-        return '\\\\{0}'.format(self.id)
+        return "\\\\{0}".format(self.id)
 
 
 class AssertToken(Token):
@@ -813,10 +837,10 @@ class EmptyToken(Token):
         return None
 
     def generate(self, context):
-        return ''
+        return ""
 
     def __str__(self):
-        return ''
+        return ""
 
 
 def parse(sre_obj, parent=None, regexp=None):
@@ -869,7 +893,9 @@ class GenerationContext(object):
 
 
 class Regexp(object):
-    def __init__(self, source, strict=False, case_sensitive=True, _root=None, _parsed=None):
+    def __init__(
+        self, source, strict=False, case_sensitive=True, _root=None, _parsed=None
+    ):
         """
         Gixy Regexp class, parse and provide helpers to work with it.
 
@@ -899,8 +925,7 @@ class Regexp(object):
         """
 
         return self.root.can_startswith(
-            char=char if self.case_sensitive else char.lower(),
-            strict=self.strict
+            char=char if self.case_sensitive else char.lower(), strict=self.strict
         )
 
     def can_contain(self, char, skip_literal=True):
@@ -920,7 +945,7 @@ class Regexp(object):
 
         return self.root.can_contain(
             char=char if self.case_sensitive else char.lower(),
-            skip_literal=skip_literal
+            skip_literal=skip_literal,
         )
 
     def must_startswith(self, char):
@@ -937,8 +962,7 @@ class Regexp(object):
         """
 
         return self.root.must_startswith(
-            char=char if self.case_sensitive else char.lower(),
-            strict=self.strict
+            char=char if self.case_sensitive else char.lower(), strict=self.strict
         )
 
     def must_contain(self, char):
@@ -973,8 +997,8 @@ class Regexp(object):
 
         context = GenerationContext(char, anchored=anchored, max_repeat=max_repeat)
         for val in self.root.generate(context=context):
-            if anchored and self.strict and not val.startswith('^'):
-                yield '^' + val
+            if anchored and self.strict and not val.startswith("^"):
+                yield "^" + val
             else:
                 yield val
 
@@ -988,7 +1012,7 @@ class Regexp(object):
 
         if name in self.groups:
             return self.groups[name]
-        return Regexp('')
+        return Regexp("")
 
     def reg_group(self, gid, token):
         self._groups[gid] = token
@@ -1003,7 +1027,12 @@ class Regexp(object):
         # for name, token in self._groups.items():
         #     result[name] = Regexp(str(self), root=token, strict=True, case_sensitive=self.case_sensitive)
         for name, parsed in extract_groups(self.parsed).items():
-            result[name] = Regexp('compiled', _parsed=parsed, strict=True, case_sensitive=self.case_sensitive)
+            result[name] = Regexp(
+                "compiled",
+                _parsed=parsed,
+                strict=True,
+                case_sensitive=self.case_sensitive,
+            )
         for name, group in self.parsed.pattern.groupdict.items():
             result[name] = result[group]
         return result
@@ -1024,12 +1053,24 @@ class Regexp(object):
             return self._parsed
 
         try:
-            self._parsed = sre_parse.parse(FIX_NAMED_GROUPS_RE.sub('(?P<\\1>', self.source))
+            self._parsed = sre_parse.parse(
+                FIX_NAMED_GROUPS_RE.sub("(?P<\\1>", self.source)
+            )
         except sre_parse.error as e:
-            LOG.fatal('Failed to parse regex: %s (%s)', self.source, str(e))
+            LOG.fatal("Failed to parse regex: %s (%s)", self.source, str(e))
             raise e
 
         return self._parsed
 
     def __str__(self):
         return str(self.root)
+
+    def needs_tail_anchor(self):
+        """Check if the regex needs a tail anchor to be effective."""
+
+        # If the regex is anchored at the end, no issue.
+        if self.source.endswith("$"):
+            return False
+
+        extension_pattern = re.compile(r"\\\.[A-Za-z0-9]+$")
+        return bool(extension_pattern.search(self.source))

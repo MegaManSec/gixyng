@@ -114,9 +114,13 @@ class LocationBlock(Block):
     def is_internal(self):
         return self.some("internal") is not None
 
+    @property
+    def is_regex(self):
+        return self.modifier and self.modifier in ("~", "~*")
+
     @cached_property
     def variables(self):
-        if not self.modifier or self.modifier not in ("~", "~*"):
+        if not self.is_regex:
             return []
 
         regexp = Regexp(self.path, case_sensitive=self.modifier == "~")
@@ -126,6 +130,20 @@ class LocationBlock(Block):
                 Variable(name=name, value=group, boundary=None, provider=self)
             )
         return result
+
+    def needs_anchor(self):
+        """
+        Check if the regex is intended to match a file extension.
+        This method looks for an unanchored pattern that ends with a literal dot
+        followed by one or more alphanumeric characters. For example, it would detect patterns
+        like r'\.php' or r'\.[A-Za-z0-9]+', and return True only if the regex is not anchored at the end.
+
+        Returns:
+            bool: True if the regex ends with a file extension pattern and is unanchored, False otherwise.
+        """
+
+        regexp = Regexp(self.path, case_sensitive=self.modifier == "~")
+        return regexp.needs_tail_anchor()
 
 
 class IfBlock(Block):

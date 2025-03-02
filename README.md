@@ -42,6 +42,7 @@ Right now Gixy can find:
 *   [[proxy_pass_normalized] `proxy_pass` will decode and normalize paths when specified with a path](https://joshua.hu/proxy-pass-nginx-decoding-normalizing-url-path-dangerous#nginx-proxy_pass)
 *   [[worker_rlimit_nofile_vs_connections] `worker_rlimit_nofile` must be at least twice `worker_connections`](https://gixy.getpagespeed.com/en/plugins/worker_rlimit_nofile_vs_connections/)
 *   [[error_log_off] `error_log` set to `off`](https://gixy.getpagespeed.com/en/plugins/error_log_off/)
+*   [[unanchored_regex] Regular expression without anchors](https://gixy.getpagespeed.com/en/plugins/unanchored_regex/)
 
 You can find things that Gixy is learning to detect at [Issues labeled with "new plugin"](https://github.com/dvershinin/gixy/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+plugin%22)
 

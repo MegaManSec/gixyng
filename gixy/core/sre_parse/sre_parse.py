@@ -391,7 +391,7 @@ def _parse_sub_cond(source, state, condgroup):
 _PATTERNENDERS = set("|)")
 _ASSERTCHARS = set("=!<")
 _LOOKBEHINDASSERTCHARS = set("=!")
-_REPEATCODES = set([MIN_REPEAT, MAX_REPEAT])
+_REPEATCODES = {MIN_REPEAT, MAX_REPEAT}
 
 
 def _parse(source, state):
