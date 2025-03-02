@@ -6,7 +6,7 @@ from gixy.plugins.plugin import Plugin
 
 
 class unanchored_regex(Plugin):
-    """
+    r"""
     Insecure example:
         location ~ \.php {
 

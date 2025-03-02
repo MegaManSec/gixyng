@@ -132,7 +132,7 @@ class LocationBlock(Block):
         return result
 
     def needs_anchor(self):
-        """
+        r"""
         Check if the regex is intended to match a file extension.
         This method looks for an unanchored pattern that ends with a literal dot
         followed by one or more alphanumeric characters. For example, it would detect patterns

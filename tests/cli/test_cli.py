@@ -6,7 +6,7 @@ This module demonstrates how to test the pixy's CLI using pytest.
 
 import sys
 import pytest
-from gixy.cli.main import main  # Adjust import according to your project structure
+from gixy.cli.main import main
 
 
 def test_cli_help(monkeypatch, capsys):
