@@ -306,7 +306,7 @@ class MapDirective(Directive):
     }
 
     geo [$remote_addr] $destination {
-      default        ZZ;
+      default        ZZ; <-- this part.
       include        conf/geo.conf; <-- this part.
       delete         127.0.0.0/16; <-- this part.
       proxy          192.168.100.0/24; <-- this part.

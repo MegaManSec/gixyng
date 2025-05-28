@@ -36,11 +36,13 @@ def test_directive(config, expected):
 @pytest.mark.parametrize('config,expected', zip(
     [
         'if (-f /some) {}',
+        'map $uri $avar {}',
         'location / {}'
     ],
 
     [
         [Directive, Block, IfBlock],
+        [Directive, Block, MapBlock],
         [Directive, Block, LocationBlock],
     ]
 ))
