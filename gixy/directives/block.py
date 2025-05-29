@@ -227,7 +227,6 @@ class MapBlock(Block):
     @cached_property
     def variables(self):
         vars = []
-        # final_source = Regexp(Variable(name="", value=self.source, provider=self).final_value)
         for child in list(self.gather_map_directives(self.children)):
             if not isinstance(child, MapDirective):
                 continue # XXX: Should never happen?
@@ -312,7 +311,6 @@ class GeoBlock(Block):
     @cached_property
     def variables(self):
         vars = []
-        # final_source = Regexp(Variable(name="", value=self.source, provider=self).final_value)
         for child in list(self.gather_geo_directives(self.children)):
             src_val = child.src_val
             dest_val = child.dest_val
