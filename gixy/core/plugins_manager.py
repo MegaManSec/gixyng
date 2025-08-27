@@ -71,6 +71,23 @@ class PluginsManager(object):
                 continue
             plugin.audit(directive)
 
+    def post_audit(self, root):
+        """Call post_audit on plugins that support full config analysis when full config is detected."""
+        if not self._is_full_config(root):
+            return
+            
+        for plugin in self.plugins:
+            if plugin.supports_full_config:
+                plugin.post_audit(root)
+
+    def _is_full_config(self, root):
+        """Detect if this is a full nginx config by checking for http block."""
+        # Check if root has an http block child
+        for child in root.children:
+            if child.name == 'http':
+                return True
+        return False
+
     def issues(self):
         result = []
         for plugin in self.plugins:

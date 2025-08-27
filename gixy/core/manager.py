@@ -25,6 +25,8 @@ class Manager(object):
 
         push_context(self.root)
         self._audit_recursive(self.root.children)
+        # Call post_audit hooks after all directives have been processed
+        self.auditor.post_audit(self.root)
 
     @property
     def results(self):

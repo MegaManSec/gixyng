@@ -58,10 +58,13 @@ def test_location_simple():
     config = """
 location / {
 }
+
 location = /foo {
 }
+
 location ~ ^/bar {
 }
+
 location ~* ^/baz$ {
 }
 location ^~ ^/bazz {
@@ -78,7 +81,7 @@ location ~\.(js|css)$ {
         ["location", ["~*", "^/baz$"], []],
         ["location", ["^~", "^/bazz"], []],
         ["Whitespace may be omitted:(("],
-        ["location", ["~", "\.(js|css)$"], []],
+        ["location", ["~\\.(js|css)$"], []],
     ]
 
     assert_config(config, expected)
@@ -410,7 +413,7 @@ init_by_lua_block {
 }
         """
 
-    expected = [["init_by_lua_block", [], ["tvm", "=", "require", '"nginx.tvm"']]]
+    expected = [["init_by_lua_block", [], ['tvm = require "nginx.tvm"']]]
 
     assert_config(config, expected)
 
@@ -445,24 +448,7 @@ location = /lua {
                     "content_by_lua_block",
                     [],
                     [
-                        "local",
-                        "res",
-                        "=",
-                        "ngx.location.capture(",
-                        '"/some_other_location"',
-                        ")",
-                        "if",
-                        "res",
-                        "then",
-                        "ngx.say(",
-                        '"status: "',
-                        ",",
-                        "res.status)",
-                        "ngx.say(",
-                        '"body:"',
-                        ")",
-                        "ngx.print(res.body)",
-                        "end",
+                        'local res = ngx.location.capture("/some_other_location")\n     if res then\n         ngx.say("status: ", res.status)\n         ngx.say("body:")\n         ngx.print(res.body)\n     end'
                     ],
                 ],
             ],
@@ -494,17 +480,7 @@ location = /foo {
                     "rewrite_by_lua_block",
                     [],
                     [
-                        "res",
-                        "=",
-                        "ngx.location.capture(",
-                        '"/memc"',
-                        ",",
-                        [
-                            "args",
-                            "=",
-                            ["cmd", "=", '"incr"', ",", "key", "=", "ngx.var.uri"],
-                        ],
-                        ")",
+                        'res = ngx.location.capture("/memc",\n         { args = { cmd = "incr", key = ngx.var.uri } }\n     )'
                     ],
                 ],
                 ["proxy_pass", "http://blah.blah.com"],

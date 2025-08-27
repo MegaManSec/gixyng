@@ -64,6 +64,22 @@ class Block(Directive):
         directive.set_parent(self)
         self.children.append(directive)
 
+    def find_children_directives(self, name):
+        """Find directives below the current scope"""
+        for child in self.children:
+            if child.name == name:
+                yield child
+            if child.is_block:
+                yield from child.find_children_directives(name)
+
+    def find_all_contexts_of_type(self, context_type):
+        """Find all contexts of a specific type (e.g., 'server', 'location') in this scope"""
+        for child in self.children:
+            if child.name == context_type:
+                yield child
+            if child.is_block:
+                yield from child.find_all_contexts_of_type(context_type)
+
     def __str__(self):
         return "{name} {args} {{".format(name=self.name, args=" ".join(self.args))
 

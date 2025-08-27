@@ -9,6 +9,9 @@ class Plugin(object):
     severity = gixy.severity.UNSPECIFIED
     directives = []
     options = {}
+    
+    # New flag to indicate plugin supports full config analysis
+    supports_full_config = False
 
     def __init__(self, config):
         self._issues = []
@@ -19,6 +22,11 @@ class Plugin(object):
                                   description=description, reason=reason, help_url=help_url))
 
     def audit(self, directive):
+        pass
+
+    def post_audit(self, root):
+        """Called after all directives have been audited with the full config tree.
+        Only called if supports_full_config is True and a full config is detected."""
         pass
 
     @property

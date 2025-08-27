@@ -3,9 +3,9 @@ import glob
 import logging
 import fnmatch
 
-from pyparsing import ParseException
 from gixy.core.exceptions import InvalidConfiguration
 from gixy.parser import raw_parser
+from gixy.parser.raw_parser import ParseException
 from gixy.directives import block, directive
 from gixy.utils.text import to_native
 
