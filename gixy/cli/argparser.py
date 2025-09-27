@@ -135,7 +135,7 @@ class ArgsParser(ArgumentParser):
                         config_file_keys
                         and not action.is_positional_arg
                         and already_on_command_line(
-                            existing_command_line_args, action.option_strings
+                            existing_command_line_args, action.option_strings, self.prefix_chars
                         )
                     ):
                         value = getattr(parsed_namespace, action.dest, None)
