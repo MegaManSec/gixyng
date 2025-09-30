@@ -23,8 +23,8 @@ class if_is_evil(Plugin):
         if not parent or parent.name != 'if':
             return
 
-        # "rewrite ... last" is safe
-        if directive.name == 'rewrite' and directive.args[-1] == 'last':
+        # "rewrite ... last", "rewrite ... redirect", and "rewrite ... permanent" are safe
+        if directive.name == 'rewrite' and len(directive.args) >= 3 and directive.args[-1] in ('last', 'redirect', 'permanent'):
             return
 
         # "return" is safe too
@@ -36,8 +36,8 @@ class if_is_evil(Plugin):
         if grandparent and grandparent.name == 'location':
             reason = 'Directive "{directive}" is not safe to use in "if in location" context'.format(directive=directive.name)
             if directive.name == 'rewrite':
-                reason = 'Directive "rewrite" is only safe to use in "if in location" context when "last" ' \
-                         'argument is used'
+                reason = 'Directive "rewrite" is only safe to use in "if in location" context when "last", ' \
+                         '"redirect", or "permanent" argument is used'
             self.add_issue(
                 severity=gixy.severity.HIGH,
                 directive=[directive, parent],

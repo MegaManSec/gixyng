@@ -9,6 +9,8 @@ The only 100% safe things which may be done inside if in a location context are:
 
 * [`return ...;`](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return)
 * [`rewrite ... last;`](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#rewrite)
+* [`rewrite ... redirect;`](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#rewrite)
+* [`rewrite ... permanent;`](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#rewrite)
 
 Anything else may cause unpredictable behavior, including potential SIGSEGV.
 
@@ -27,7 +29,7 @@ if ($args ~ post=140){
 
 ## What to do instead
 
-Use the "return ..." or "rewrite ... last" if it suits your needs.
+Use the "return ...", "rewrite ... last", "rewrite ... redirect", or "rewrite ... permanent" if it suits your needs.
 You can allocate additional locations and `map` if you want to set variables based on conditions.
 
 In some cases, it's also possible to move `if`s to server level (where it's safe as only other rewrite module directives are allowed within it).
