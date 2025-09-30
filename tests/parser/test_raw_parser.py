@@ -597,6 +597,28 @@ add_header X-Test "Windows-1251";
     assert len(actual.asList()) == 2
 
 
+def test_env_with_escaped_semicolons():
+    """Test that env directive with escaped semicolons parses correctly.
+    
+    This is a regression test for the issue where env directives with
+    escaped semicolons (used in LUA_PATH and similar environment variables)
+    would fail to parse. The backslashes escape the semicolons so they're
+    not treated as statement terminators.
+    
+    Example: env LUA_PATH=\;\;\;/path/to/lua
+    The \; sequences should be preserved as literal semicolons in the value.
+    """
+    config = r"""env LUA_PATH=\;\;\;/nix/store/7bn0dr50s3cg2pvcl2d6k3apbpgxj0fk-lua5.2-luasocket-3.1.0-1/share/lua/5.2/?.lua;
+env LUA_CPATH=\;\;\;/nix/store/7bn0dr50s3cg2pvcl2d6k3apbpgxj0fk-lua5.2-luasocket-3.1.0-1/lib/lua/5.2/?.so;"""
+
+    expected = [
+        ['env', 'LUA_PATH=\\;\\;\\;/nix/store/7bn0dr50s3cg2pvcl2d6k3apbpgxj0fk-lua5.2-luasocket-3.1.0-1/share/lua/5.2/?.lua'],
+        ['env', 'LUA_CPATH=\\;\\;\\;/nix/store/7bn0dr50s3cg2pvcl2d6k3apbpgxj0fk-lua5.2-luasocket-3.1.0-1/lib/lua/5.2/?.so']
+    ]
+
+    assert_config(config, expected)
+
+
 def assert_config(config, expected):
     actual = RawParser().parse(config)
     assert actual.asList() == expected
