@@ -3,6 +3,8 @@
 from gixy.core.variable import Variable
 from gixy.core.regexp import Regexp
 
+import ipaddress
+ 
 def get_overrides():
     """Get a list of all directives that override the default behavior"""
     result = {}
@@ -236,36 +238,23 @@ def is_local_ipv6(ip):
     IP may include a port number, e.g. `[::1]:80`
     If port is not specified, IP can be specified without brackets, e.g. ::1
     """
-    # Remove brackets if present
     if ip.startswith("[") and "]" in ip:
         ip = ip.split("]")[0][1:]
-
-    # Exclude loopback address ([::1])
-    if ip == "::1":
-        return True
-    # Exclude link-local addresses (fe80::/10)
-    if ip.startswith("fe80:"):
-        return True
-    # Exclude unique local addresses (fc00::/7)
-    if ip.startswith("fc") or ip.startswith("fd"):
-        return True
-    return False
+    try:
+        ip_obj = ipaddress.IPv6Address(ip)
+        return ip_obj.is_loopback or ip_obj.is_link_local or ip_obj.is_private
+    except ValueError:
+        return False
 
 
 def is_local_ipv4(addr):
-    """Check if an IPv4 address is a local address"""
+    """Check if an IPv4 address is a local address (loopback/private/link-local)."""
     ip = addr.rsplit(":", 1)[0]
-    # Exclude loopback addresses (127.0.0.0/8)
-    if ip.startswith("127."):
-        return True
-    # Exclude private addresses (10.x.x.x, 172.16.x.x - 172.31.x.x, 192.168.x.x)
-    if ip.startswith("10.") or ip.startswith("192.168."):
-        return True
-    if ip.startswith("172."):
-        second_octet = int(ip.split(".")[1])
-        if 16 <= second_octet <= 31:
-            return True
-    return False
+    try:
+        ip_obj = ipaddress.IPv4Address(ip)
+        return ip_obj.is_loopback or ip_obj.is_private or ip_obj.is_link_local
+    except ValueError:
+        return False
 
 
 class ResolverDirective(Directive):
@@ -287,14 +276,17 @@ class ResolverDirective(Directive):
     def get_external_nameservers(self):
         """Get a list of external nameservers used by the resolver directive"""
         external_nameservers = []
+        local_suffixes = (
+            ".intranet", ".internal", ".private", ".corp", ".home",
+            ".lan", ".local", ".localhost"
+        )
         for addr in self.addresses:
-            # Check for IPv4 addresses
+            if any(addr.endswith(suffix) for suffix in local_suffixes):
+                continue
             if "." in addr and is_local_ipv4(addr):
                 continue
-            # Check for IPv6 addresses
             if ":" in addr and is_local_ipv6(addr):
                 continue
-
             external_nameservers.append(addr)
         return external_nameservers
 
