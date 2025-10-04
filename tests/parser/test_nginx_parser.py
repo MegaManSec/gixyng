@@ -77,26 +77,16 @@ server {
     assert isinstance(http, Block)
     assert isinstance(http, HttpBlock)
 
+    # After flattening dump includes, server block is directly under http
     assert len(http.children) == 1
-    include_server = http.children[0]
-    assert isinstance(include_server, Directive)
-    assert isinstance(include_server, IncludeBlock)
-    assert include_server.file_path == '/etc/nginx/sites/default.conf'
-
-    assert len(include_server.children) == 1
-    server = include_server.children[0]
+    server = http.children[0]
     assert isinstance(server, Directive)
     assert isinstance(server, Block)
     assert isinstance(server, ServerBlock)
 
+    # listen directive from included file is now flattened under server
     assert len(server.children) == 1
-    include_listen = server.children[0]
-    assert isinstance(include_listen, Directive)
-    assert isinstance(include_listen, IncludeBlock)
-    assert include_listen.file_path == '/etc/nginx/conf.d/listen'
-
-    assert len(include_listen.children) == 1
-    listen = include_listen.children[0]
+    listen = server.children[0]
     assert isinstance(listen, Directive)
     assert listen.args == ['80']
 
@@ -109,6 +99,77 @@ def test_encoding():
     for i, config in enumerate(configs):
         _parse(config)
 
+
+def test_dump_nested_include_resolves_relative_to_root():
+    config = '''
+# configuration file /etc/nginx/nginx.conf:
+http {
+    include sites/a.conf;
+}
+
+# configuration file /etc/nginx/sites/a.conf:
+server {
+    include snippets/shared;
+}
+
+# configuration file /etc/nginx/snippets/shared:
+add_header X-Test 1;
+    '''
+
+    tree = _parse(config)
+    assert isinstance(tree, Directive)
+    assert isinstance(tree, Block)
+    assert isinstance(tree, Root)
+
+    assert len(tree.children) == 1
+    http = tree.children[0]
+    assert isinstance(http, Directive)
+    assert isinstance(http, Block)
+    assert isinstance(http, HttpBlock)
+
+    # server is directly under http after flattening
+    assert len(http.children) == 1
+    server = http.children[0]
+    assert isinstance(server, Directive)
+    assert isinstance(server, Block)
+    assert isinstance(server, ServerBlock)
+
+    # add_header from snippets/shared is flattened under server
+    assert len(server.children) == 1
+    add_header = server.children[0]
+    assert isinstance(add_header, Directive)
+    assert add_header.name == 'add_header'
+    assert add_header.args == ['X-Test', '1']
+
+
+def test_dump_sibling_includes_resolve_from_prefix():
+    config = '''
+# configuration file /etc/nginx/nginx.conf:
+http {
+    include sites/default.conf;
+}
+
+# configuration file /etc/nginx/sites/default.conf:
+server {
+    include conf.d/listen;
+    include conf.d/add_header;
+}
+
+# configuration file /etc/nginx/conf.d/listen:
+listen 80;
+
+# configuration file /etc/nginx/conf.d/add_header:
+add_header X-Foo bar;
+    '''
+
+    tree = _parse(config)
+    http = tree.children[0]
+    server = http.children[0]
+
+    assert len(server.children) == 2
+    names = [c.name for c in server.children]
+    assert 'listen' in names
+    assert 'add_header' in names
 
 def assert_config(config, expected):
     tree = _parse(config)

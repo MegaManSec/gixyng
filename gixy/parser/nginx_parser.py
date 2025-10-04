@@ -152,15 +152,27 @@ class NginxParser(object):
 
     def _resolve_dump_include(self, pattern, parent):
         path = os.path.join(self.cwd, pattern)
-        founded = False
+        found = False
         for file_path, parsed in self.configs.items():
-            if fnmatch.fnmatch(file_path, path):
-                founded = True
-                include = block.IncludeBlock("include", [file_path])
-                parent.append(include)
-                self.parse_block(parsed, include)
+            if not fnmatch.fnmatch(file_path, path):
+                continue
+            found = True
 
-        if not founded:
+            # Flatten includes by parsing into the current parent context.
+            # We only switch the path stack for correct file attribution but keep
+            # cwd unchanged (prefix-based) so relative includes inside dumps
+            # resolve as they commonly do in nginx deployments.
+            # This intentionally diverges from commit 0ef30ce (which switches cwd
+            # to the included file directory) to avoid mis-resolving patterns like
+            # sites/default.conf including conf.d/listen → /etc/nginx/conf.d/listen.
+            old_stack = self._path_stack
+            self._path_stack = file_path
+
+            self.parse_block(parsed, parent)
+
+            self._path_stack = old_stack
+
+        if not found:
             LOG.warning("File not found: {0}".format(path))
 
     def _prepare_dump(self, parsed_block):
