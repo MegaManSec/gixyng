@@ -148,7 +148,11 @@ class NginxParser(object):
             self.parse_file(file_path, parent)
 
         if not exists:
-            LOG.warning("File not found: {0}".format(path))
+            # Align behavior with nginx: unmatched glob patterns are not warnings
+            if glob.has_magic(path):
+                LOG.debug("Include pattern matched no files: {0}".format(path))
+            else:
+                LOG.warning("File not found: {0}".format(path))
 
     def _resolve_dump_include(self, pattern, parent):
         path = os.path.join(self.cwd, pattern)
@@ -173,7 +177,11 @@ class NginxParser(object):
             self._path_stack = old_stack
 
         if not found:
-            LOG.warning("File not found: {0}".format(path))
+            # Align behavior with nginx: unmatched glob patterns are not warnings
+            if glob.has_magic(path):
+                LOG.debug("Include pattern matched no files: {0}".format(path))
+            else:
+                LOG.warning("File not found: {0}".format(path))
 
     def _prepare_dump(self, parsed_block):
         filename = ""
