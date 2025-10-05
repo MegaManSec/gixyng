@@ -31,9 +31,9 @@ nav:
     - Using external DNS nameservers: https://blog.zorinaq.com/nginx-resolver-vulns/
     - Unsafe path decoding with proxy_pass: https://joshua.hu/proxy-pass-nginx-decoding-normalizing-url-path-dangerous#nginx-proxy_pass
     - Version Disclosure: en/plugins/version_disclosure.md
-    - Hash without default: en/plugins/hash_without_default.md
     - Return bypasses allow/deny: en/plugins/return_bypasses_allow_deny.md
     - Missing default_server on shared listen: en/plugins/default_server_flag.md
+  - 'NGINX Extras RPMs': 'https://nginx-extras.getpagespeed.com/'
   - 'Blog': 'https://www.getpagespeed.com/posts'
 markdown_extensions:
   - admonition
@@ -44,6 +44,7 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.tasklist
   - pymdownx.snippets:
+      base_path: docs
       check_paths: true
   - toc:
       permalink: "¤"

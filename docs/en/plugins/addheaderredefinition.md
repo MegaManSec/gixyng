@@ -61,3 +61,5 @@ There are several ways to solve this problem:
  - duplicate important headers;
  - set all headers at one level (`server` section is a good choice)
  - use [ngx_headers_more](https://nginx-extras.getpagespeed.com/modules/headers-more/) module.
+
+--8<-- "en/snippets/nginx-extras-cta.md"

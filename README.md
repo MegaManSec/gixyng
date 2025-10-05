@@ -11,6 +11,12 @@ GIXY
 > [!TIP]
 > This is an **actively maintained fork** of the original [Gixy](https://github.com/yandex/gixy) project by **Yandex LLC**.
 
+[![NGINX Extras](https://img.shields.io/badge/NGINX%20Extras-Subscribe-blue?logo=nginx&style=flat-square)](https://nginx-extras.getpagespeed.com/)
+
+> [!NOTE]
+> Keep NGINX secure and up-to-date with maintained modules via NGINX Extras RPM repository by GetPageSpeed:
+> `https://nginx-extras.getpagespeed.com/`
+
 # Overview
 <img align="right" width="192" height="192" src="docs/gixy.png">
 

@@ -122,5 +122,3 @@ class default_server_flag(Plugin):
             pass
         key = f"{address}:{port}"
         return key, is_default
-
-

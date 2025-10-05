@@ -17,3 +17,5 @@ Why are additional FDs necessary?
     * It acts like a proxy server when the cache is empty or the cached content has expired.
 
 By ensuring the FD limit is at least twice the number of `worker_connections`, you accommodate the minimum FD requirements across these different modes of operation.
+
+--8<-- "en/snippets/nginx-extras-cta.md"

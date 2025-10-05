@@ -51,5 +51,4 @@ http {
 
 - NGINX `listen` directive: https://nginx.org/en/docs/http/ngx_http_core_module.html#listen
 
-
-
+--8<-- "en/snippets/nginx-extras-cta.md"

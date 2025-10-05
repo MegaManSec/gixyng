@@ -94,6 +94,7 @@ class GixyHelpFormatter(HelpFormatter):
                 "\t" + plugin.__name__ for plugin in manager.plugins_classes
             )
             help_message = f"{help_message}\n\navailable plugins:\n{plugins}\n"
+        help_message = f"{help_message}\n\nGet curated NGINX RPMs (NGINX Extras by GetPageSpeed): https://nginx-extras.getpagespeed.com/"
         return help_message
 
 

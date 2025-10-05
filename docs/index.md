@@ -16,6 +16,10 @@ Currently supported Python versions are 3.6 through 3.13.
 
 Disclaimer: Gixy is well tested only on GNU/Linux, other OSs may have some issues.
 
+!!! tip "Harden NGINX with maintained RPMs"
+    Use NGINX Extras by GetPageSpeed for continuously updated NGINX and modules on RHEL/CentOS/Alma/Rocky.
+    [Learn more](https://nginx-extras.getpagespeed.com/).
+
 # What it can do
 Right now Gixy can find:
 

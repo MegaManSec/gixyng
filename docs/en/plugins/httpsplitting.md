@@ -50,3 +50,5 @@ As you can see, an attacker could add `x-crlf-header: injected` response header.
   - try to use safe variables, e.g. `$request_uri` instead of `$uri`;
   - forbid the use of the new line symbol in the exclusive range by using `/some/(?<action>[^/\s]+)` instead of `/some/(?<action>[^/]+`
   - it could be a good idea to validate `$uri` (only if you're sure you know what are you getting into).
+
+--8<-- "en/snippets/nginx-extras-cta.md"

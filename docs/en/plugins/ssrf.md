@@ -59,3 +59,5 @@ There are several rules you better follow when writing such configurations:
   - protect proxied server's address:
     * if the quantity of proxied hosts is limited (when you have S3 or smth), you better hardcode them and choose them with `map` or do it some other way;
     * if you can't list all possible hosts to proxy, you should sign the address.
+
+--8<-- "en/snippets/nginx-extras-cta.md"

@@ -23,3 +23,5 @@ more_set_headers -t 'text/html text/plain'
 
 ## What can I do?
 The only solution is to never use multiline response headers.
+ 
+--8<-- "en/snippets/nginx-extras-cta.md"

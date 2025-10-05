@@ -126,3 +126,5 @@ This information helps attackers:
 2. **Or set it individually** in each server block if you need granular control
 3. **Never use `server_tokens build;`** as it exposes even more information
 4. **Test your configuration** to ensure version information is not leaked
+
+--8<-- "en/snippets/nginx-extras-cta.md"

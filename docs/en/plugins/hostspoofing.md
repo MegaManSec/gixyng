@@ -30,3 +30,5 @@ Luckily, all is quite obvious:
 ## Additional info
   * [Host of Troubles Vulnerabilities](https://hostoftroubles.com/)
   * [Practical HTTP Host header attacks](http://www.skeletonscribe.net/2013/05/practical-http-host-header-attacks.html)
+
+--8<-- "en/snippets/nginx-extras-cta.md"

@@ -33,3 +33,11 @@ def test_cli_vars_dirs_option_present():
     args = parser.parse_args(["--vars-dirs", "/etc/gixy/vars", "-"])
     # ensure option parsed
     assert getattr(args, "vars_dirs", None) == "/etc/gixy/vars"
+
+
+def test_cli_help_contains_cta(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["gixy", "--help"])
+    with pytest.raises(SystemExit):
+        main()
+    captured = capsys.readouterr()
+    assert "nginx-extras.getpagespeed.com" in captured.out
