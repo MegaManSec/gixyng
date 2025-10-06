@@ -187,6 +187,34 @@ class IfBlock(Block):
     def __str__(self):
         return "{name} ({args}) {{".format(name=self.name, args=" ".join(self.args))
 
+    @cached_property
+    def variables(self):
+        """
+        Provide regex capture groups from if-conditions using =~ operators.
+
+        Examples:
+          if ($request_uri ~ ^/old/(.*)) { set $x $1; }
+          if ($var ~* (a)(b)) { return 301 /$1/$2; }
+
+        We expose numeric backrefs like 0, 1, 2... similar to location ~ and rewrite.
+        """
+        # Only conditions with regex operators can yield capture groups
+        if self.operand in ("~", "~*", "!~", "!~*") and self.value:
+            case_sensitive = self.operand in ("~", "!~")
+            regexp = Regexp(self.value, case_sensitive=case_sensitive)
+            result = []
+            for name, group in regexp.groups.items():
+                result.append(
+                    Variable(name=name, value=group, boundary=None, provider=self)
+                )
+            return result
+        return []
+
+    @property
+    def provide_variables(self):
+        # Only if-conditions with regex operators can provide backrefs
+        return self.operand in ("~", "~*", "!~", "!~*") and bool(self.value)
+
 
 class IncludeBlock(Block):
     nginx_name = "include"

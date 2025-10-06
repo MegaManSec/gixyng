@@ -135,6 +135,31 @@ if ($http_some = '/some') {
     assert directive.value == '/some'
 
 
+def test_if_regex_backrefs_provide_variables():
+    from gixy.directives.block import IfBlock
+    from gixy.core.manager import Manager
+    from gixy.parser.nginx_parser import NginxParser
+
+    config = r"""
+    if ($request_uri ~ ^/old-path/(.*)) {
+        set $new_value $1;
+        return 301 /new-path/$new_value;
+    }
+    """
+
+    tree = NginxParser(cwd='', allow_includes=False).parse(config)
+    # Find the IfBlock and ensure variables (numeric backrefs) are provided
+    if_block = None
+    for child in tree.children:
+        if child.name == 'if':
+            if_block = child
+            break
+    assert if_block is not None
+    # Backref variables should be present (at least group 0 and 1)
+    var_names = sorted([v.name for v in if_block.variables])
+    assert 0 in var_names and 1 in var_names
+
+
 def test_block_some_flat():
     config = '''
     some {

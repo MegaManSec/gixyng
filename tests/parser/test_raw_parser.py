@@ -291,6 +291,26 @@ if ($foo = "BAR") { rewrite ^(.*)$ /bar; }
     assert_config(config, expected)
 
 
+def test_if_regex_backref_resolution_in_body():
+    # Ensure that a regex in if condition provides $1 within its body
+    config = r"""
+    if ($request_uri ~ ^/old-path/(.*)) {
+        set $new_value $1;
+        return 301 /new-path/$new_value;
+    }
+    """
+
+    expected = [
+        [
+            "if",
+            ["$request_uri", "~", "^/old-path/(.*)"],
+            [["set", "$new_value", "$1"], ["return", "301", "/new-path/$new_value"]],
+        ]
+    ]
+
+    assert_config(config, expected)
+
+
 def test_hash_block_map():
     config = """
 # https://nginx.org/ru/docs/http/ngx_http_map_module.html
