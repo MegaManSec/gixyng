@@ -1,4 +1,4 @@
-# [invalid_reference] Using a nonexistent regex capture group
+# [invalid_regex] Using a nonexistent regex capture group
 
 When using regular expressions with capturing groups in NGINX directives like `rewrite` or within `if` conditions, you can reference these captured groups using `$1`, `$2`, etc. in replacement strings or subsequent directives. However, if you reference a capture group that doesn't exist in the regex pattern, NGINX will treat it as an empty string, which can lead to unexpected behavior.
 

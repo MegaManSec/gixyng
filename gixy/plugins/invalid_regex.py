@@ -4,7 +4,7 @@ from gixy.plugins.plugin import Plugin
 from gixy.core.regexp import Regexp
 
 
-class invalid_reference(Plugin):
+class invalid_regex(Plugin):
     """
     Detects when a directive references a regex capture group ($1, $2, etc.) 
     that doesn't exist in the associated regex pattern.

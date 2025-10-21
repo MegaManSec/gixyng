@@ -45,7 +45,7 @@ Right now Gixy can find:
 *   [[error_log_off] `error_log` set to `off`](https://gixy.getpagespeed.com/en/plugins/error_log_off/)
 *   [[unanchored_regex] Regular expression without anchors](https://gixy.getpagespeed.com/en/plugins/unanchored_regex/)
 *   [[regex_redos] Regular expressions may result in easy denial-of-service (ReDoS) attacks](https://gixy.getpagespeed.com/en/plugins/regex_redos/)
-*   [[invalid_reference] Using a nonexistent regex capture group](https://github.com/dvershinin/gixy/blob/master/docs/en/plugins/invalid_reference.md)
+*   [[invalid_regex] Using a nonexistent regex capture group](https://github.com/dvershinin/gixy/blob/master/docs/en/plugins/invalid_regex.md)
 
 You can find things that Gixy is learning to detect at [Issues labeled with "new plugin"](https://github.com/dvershinin/gixy/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+plugin%22)
 
