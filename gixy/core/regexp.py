@@ -23,21 +23,19 @@ def _build_reverse_list(original):
     return frozenset(result)
 
 
-FIX_NAMED_GROUPS_RE = re.compile(r"(?<!\\)\(\?(?:<|')(\w+)(?:>|')")
+FIX_NAMED_GROUPS_RE = re.compile(r"(?<!\\)\(\?[<'](\w+)[>']")
 
 CATEGORIES = {
-    # TODO(buglloc): unicode?
+    # Note: ASCII only, unicode not supported
     sre_parse.CATEGORY_SPACE: sre_parse.WHITESPACE,
     sre_parse.CATEGORY_NOT_SPACE: _build_reverse_list(sre_parse.WHITESPACE),
     sre_parse.CATEGORY_DIGIT: sre_parse.DIGITS,
     sre_parse.CATEGORY_NOT_DIGIT: _build_reverse_list(sre_parse.DIGITS),
     sre_parse.CATEGORY_WORD: frozenset(
-        "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "0123456789_"
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
     ),
     sre_parse.CATEGORY_NOT_WORD: _build_reverse_list(
-        frozenset(
-            "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "0123456789_"
-        )
+        frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_")
     ),
     sre_parse.CATEGORY_LINEBREAK: frozenset("\n"),
     sre_parse.CATEGORY_NOT_LINEBREAK: _build_reverse_list(frozenset("\n")),
