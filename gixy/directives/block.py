@@ -4,7 +4,7 @@ except ImportError:
     from functools import cached_property
 
 from gixy.directives.directive import Directive, MapDirective
-from gixy.core.variable import Variable
+from gixy.core.variable import Variable, compile_script
 from gixy.core.regexp import Regexp
 
 
@@ -184,43 +184,36 @@ class IfBlock(Block):
         else:
             raise Exception('Unknown "if" definition, args: {0!r}'.format(args))
 
+    @property
+    def provide_variables(self):
+        return self.operand in ("~", "~*", "!~", "!~*") and bool(self.value)
+
     def __str__(self):
         return "{name} ({args}) {{".format(name=self.name, args=" ".join(self.args))
 
+    @property
+    def is_regex(self):
+        return self.operand and self.operand in ("~", "~*", "!~", "!~*")
+
     @cached_property
     def variables(self):
-        """
-        Provide regex capture groups from if-conditions using =~ operators.
+        if not self.is_regex or not self.value:
+            return []
 
-        Examples:
-          if ($request_uri ~ ^/old/(.*)) { set $x $1; }
-          if ($var ~* (a)(b)) { return 301 /$1/$2; }
+        boundary = None
+        if self.variable:
+            compiled_script = compile_script(self.variable)
+            if len(compiled_script) == 1:
+                boundary = compiled_script[0].regexp
 
-        We expose numeric backrefs like 0, 1, 2... similar to location ~ and rewrite.
-        """
-        # Only conditions with regex operators can yield capture groups
-        if self.operand in ("~", "~*", "!~", "!~*") and self.value:
-            case_sensitive = self.operand in ("~", "!~")
-            regexp = Regexp(self.value, case_sensitive=case_sensitive)
-            result = []
-            for name, group in regexp.groups.items():
-                result.append(
-                    Variable(name=name, value=group, boundary=group, provider=self)
-                )
-            return result
-        return []
+        regexp = Regexp(self.value, case_sensitive=self.operand in {"~", '!~'})
+        result = []
+        for name, group in regexp.groups.items():
+            result.append(
+                Variable(name=name, value=group, boundary=boundary, provider=self)
+            )
 
-    @property
-    def provide_variables(self):
-        # NOTE: keep this as an instance-level property (not a class flag) on purpose.
-        # Other directives (e.g. location, rewrite) advertise capability at class-level,
-        # but for IfBlock the test suite relies on reflecting the current condition:
-        # provide_variables must be False for non-regex if, and True only when a regex
-        # operator (~, ~*, !~, !~*) is used. This preserves the "this instance provides
-        # variables now" semantics and avoids breaking existing expectations.
-        # Only if-conditions with regex operators can provide backrefs
-        return self.operand in ("~", "~*", "!~", "!~*") and bool(self.value)
-
+        return result
 
 class IncludeBlock(Block):
     nginx_name = "include"

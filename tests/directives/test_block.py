@@ -109,6 +109,24 @@ if ($some) {
     assert directive.value is None
 
 
+def test_if_with_regex():
+    config = '''
+if ($var ~* (a)(b)) {
+return 301 /$1/$2;
+}
+    '''
+
+    directive = _get_parsed(config)
+    assert isinstance(directive, IfBlock)
+    assert directive.is_block
+    assert not directive.self_context
+    assert directive.provide_variables
+    assert directive.variable == '$var'
+    assert directive.operand is '~*'
+    assert directive.value is '(a)(b)'
+    assert len(directive.variables) == 2
+
+
 def test_if_modifier():
     config = '''
 if (-f /some) {
