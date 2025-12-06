@@ -1,7 +1,7 @@
 from itertools import product
 import logging
 import re
-import random
+import random  # noqa: S311 - used for example generation, not security
 import itertools
 
 try:
