@@ -128,7 +128,7 @@ class TestAddHeaderMultilineNoneValueFailsWithoutFix:
         value = None
         
         with pytest.raises(TypeError, match="argument of type 'NoneType' is not iterable"):
-            _ = "\n " in value
+            _ = "\n " in value  # noqa: This intentionally tests TypeError on None
 
     def test_fix_demonstrates_defensive_handling(self):
         """
