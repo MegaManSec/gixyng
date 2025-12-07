@@ -17,30 +17,46 @@ This can cause:
 - **Security issues** if old IPs are reassigned to malicious actors
 - **Load balancing failures** when using DNS-based load balancing
 
-## Smart Detection Features
+## Smart Detection: Inverse Logic
 
-This plugin goes beyond simple suffix matching:
+This plugin uses **inverse logic** for maximum coverage and security:
+
+> Instead of trying to identify public domains (impossible without the [Public Suffix List](https://publicsuffix.org/)), we identify what's **DEFINITELY INTERNAL** and flag **EVERYTHING ELSE**.
+
+This approach is superior because:
+- ✅ **No external dependencies** - no need for PSL, tldextract, or any library
+- ✅ **No hardcoded TLD list** that becomes outdated
+- ✅ **New TLDs automatically flagged** - `.ai`, `.xyz`, `.whatever` all get caught
+- ✅ **More secure** - false positives are better than false negatives for security tools
+- ✅ **Future-proof** - works with any domain that will ever exist
 
 ### 🔥 Cloud Provider Detection (HIGH severity)
-Automatically detects endpoints from major cloud providers where IPs change frequently:
-- **AWS**: ELB, CloudFront, API Gateway, Elastic Beanstalk, Lambda URLs, S3
-- **Google Cloud**: Cloud Run, Cloud Functions, App Engine, Google APIs
-- **Azure**: App Service, API Management, CDN, Traffic Manager, Blob Storage
-- **Cloudflare**: Workers, Pages
-- **PaaS**: Heroku, Vercel, Netlify, Railway, Render, Fly.io, DigitalOcean App Platform
-
-### 🎯 Proper TLD Classification
-- Recognizes 100+ public TLDs (not just checking for a dot)
-- Supports compound TLDs: `.co.uk`, `.com.au`, `.co.jp`, etc.
-- Won't false-positive on internal hostnames
+Automatically detects 50+ cloud provider patterns where IPs change frequently:
+- **AWS**: ELB, CloudFront, API Gateway, Elastic Beanstalk, Lambda URLs, S3, Amplify, Global Accelerator
+- **Google Cloud**: Cloud Run, Cloud Functions, App Engine, Firebase, Google APIs
+- **Azure**: App Service, API Management, CDN, Traffic Manager, Front Door, Static Web Apps
+- **Cloudflare**: Workers, Pages, R2
+- **CDNs**: Akamai, Fastly, CDN77, StackPath, KeyCDN, BunnyCDN
+- **PaaS**: Heroku, Vercel, Netlify, Railway, Render, Fly.io, Deno Deploy, Supabase, Neon, PlanetScale
+- **Cloud**: DigitalOcean, Linode, Vultr, Scaleway, Hetzner, UpCloud
 
 ### 🐳 Container Orchestration Awareness
 Automatically skips internal service discovery patterns:
 - **Kubernetes**: `.svc.cluster.local`, `.pod.cluster.local`, `.default.svc`
-- **Docker**: `.docker.internal`
-- **Consul**: `.service.consul`, `.node.consul`
-- **Mesos**: `.marathon.mesos`
+- **Docker**: `.docker.internal`, `.docker.localhost`
+- **Consul**: `.service.consul`, `.node.consul`, `.query.consul`
+- **HashiCorp**: `.vault`, `.nomad`
+- **Mesos/Marathon**: `.marathon.mesos`, `.dcos`
 - **Rancher**: `.rancher.internal`
+- **AWS Internal**: `.ec2.internal`, `.compute.internal`
+- **OpenStack**: `.novalocal`, `.openstacklocal`
+
+### 🎯 RFC-Compliant Reserved TLD Detection
+Recognizes RFC 2606/6761/6762/7686 reserved TLDs:
+- `.test`, `.example`, `.invalid` (RFC 2606)
+- `.localhost` (RFC 6761)
+- `.local` (RFC 6762 - mDNS/Bonjour)
+- `.onion` (RFC 7686 - Tor)
 
 ### 🔍 Resolver Directive Checking
 Detects when you use a variable but forgot to configure the `resolver` directive:
