@@ -5,7 +5,7 @@ from gixy.utils.text import to_text
 
 
 def load_template(name):
-    env = Environment(loader=PackageLoader('gixy', 'formatters/templates'), trim_blocks=True, lstrip_blocks=True)
+    env = Environment(loader=PackageLoader('gixy', 'formatters/templates'), trim_blocks=True, lstrip_blocks=True, autoescape=False)
     env.filters['to_text'] = to_text_filter
     return env.get_template(name)
 
