@@ -1,3 +1,2 @@
 # Formatter tests
 
-

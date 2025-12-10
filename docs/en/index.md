@@ -47,7 +47,6 @@ Right now Gixy can find:
 *   [[try_files_is_evil_too] try_files without open_file_cache](plugins/try_files_is_evil_too.md)
 *   [[worker_rlimit_nofile_vs_connections] Worker connections vs rlimit](plugins/worker_rlimit_nofile_vs_connections.md)
 *   [[low_keepalive_requests] Low keepalive_requests value](plugins/low_keepalive_requests.md)
-*   [[missing_resolver] Static DNS resolution in proxy_pass](plugins/missing_resolver.md)
 
 You can find things that Gixy is learning to detect at [Issues labeled with "new plugin"](https://github.com/dvershinin/gixy/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+plugin%22)
 

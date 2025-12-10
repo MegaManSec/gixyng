@@ -54,7 +54,6 @@ nav:
     - plugins/try_files_is_evil_too.md
     - plugins/worker_rlimit_nofile_vs_connections.md
     - plugins/low_keepalive_requests.md
-    - plugins/missing_resolver.md
   - 'NGINX Extras RPMs': 'https://nginx-extras.getpagespeed.com/'
   - 'Blog': 'https://www.getpagespeed.com/posts'
 markdown_extensions:

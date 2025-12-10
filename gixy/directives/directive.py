@@ -67,17 +67,7 @@ class Directive:
                 return directive
         return None
 
-    def find_imperative_directives_in_scope(self, name, ancestors=True):
-        """Find imperative directives (like upstream blocks) in the current scope.
-        
-        Unlike find_directives_in_scope which looks for directives before this one,
-        this method finds blocks/directives that can be referenced from anywhere
-        (like upstream blocks which are defined at http level but used in server/location).
-        """
-        for parent in self.parents:
-            yield from parent.find(name, flat=False)
-            if not ancestors:
-                break
+
 
     def __str__(self):
         return f"{self.name} {' '.join(self.args)};"
@@ -242,28 +232,6 @@ class AliasDirective(Directive):
     def __init__(self, name, args):
         super().__init__(name, args)
         self.path = args[0]
-
-
-def is_ipv6(host, strip_brackets=True):
-    """Check if a string is an IPv6 address (may include port)."""
-    if strip_brackets and host.startswith("[") and "]" in host:
-        host = host.split("]")[0][1:]
-    try:
-        ipaddress.IPv6Address(host)
-        return True
-    except ValueError:
-        return False
-
-
-def is_ipv4(host, strip_port=True):
-    """Check if a string is an IPv4 address (may include port)."""
-    if strip_port:
-        host = host.rsplit(":", 1)[0]
-    try:
-        ipaddress.IPv4Address(host)
-        return True
-    except ValueError:
-        return False
 
 
 def is_local_ipv6(ip):
