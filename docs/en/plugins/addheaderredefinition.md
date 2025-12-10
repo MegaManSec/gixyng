@@ -58,45 +58,9 @@ new-headers
 
 ## What can I do?
 There are several ways to solve this problem:
-
-### 1. Use `add_header_inherit` (nginx 1.29.3+)
-
-Starting with nginx 1.29.3, you can use the `add_header_inherit` directive to inherit headers from parent levels:
-
-```nginx
-server {
-    listen 80;
-    add_header X-Frame-Options "DENY" always;
-    
-    location /new-headers {
-        add_header_inherit on;  # Inherit X-Frame-Options from server
-        add_header Cache-Control "no-cache" always;
-        return 200 "new-headers";
-    }
-}
-```
-
-This is the cleanest solution if you're running nginx 1.29.3 or later.
-
-### 2. Duplicate important headers
-
-Manually include all parent headers in nested locations:
-
-```nginx
-location /new-headers {
-    add_header X-Frame-Options "DENY" always;  # Duplicated
-    add_header Cache-Control "no-cache" always;
-    return 200 "new-headers";
-}
-```
-
-### 3. Set all headers at one level
-
-Set all headers in the `server` section and avoid `add_header` in locations.
-
-### 4. Use ngx_headers_more module
-
-Use [ngx_headers_more](https://nginx-extras.getpagespeed.com/modules/headers-more/) module which has better inheritance behavior.
+ - duplicate important headers;
+ - set all headers at one level (`server` section is a good choice)
+ - use [ngx_headers_more](https://nginx-extras.getpagespeed.com/modules/headers-more/) module.
 
 --8<-- "en/snippets/nginx-extras-cta.md"
 

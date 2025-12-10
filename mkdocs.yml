@@ -50,8 +50,6 @@ nav:
     - plugins/hash_without_default.md
     - plugins/unanchored_regex.md
     - plugins/regex_redos.md
-    - plugins/invalid_regex.md
-    - plugins/try_files_is_evil_too.md
     - plugins/worker_rlimit_nofile_vs_connections.md
     - plugins/low_keepalive_requests.md
   - 'NGINX Extras RPMs': 'https://nginx-extras.getpagespeed.com/'

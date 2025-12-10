@@ -11,21 +11,11 @@ class add_header_redefinition(Plugin):
                 add_header X-Frame-Options DENY;
             }
         }
-    
-    Safe with nginx 1.29.3+ using add_header_inherit:
-        server {
-            add_header X-Content-Type-Options nosniff;
-            location / {
-                add_header_inherit on;
-                add_header X-Frame-Options DENY;
-            }
-        }
     """
     summary = 'Nested "add_header" drops parent headers.'
     severity = gixy.severity.LOW
     description = ('"add_header" replaces ALL parent headers. '
-                   'See documentation: https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header '
-                   'Note: nginx 1.29.3+ supports "add_header_inherit on;" to inherit parent headers.')
+                   'See documentation: https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header')
     help_url = 'https://github.com/dvershinin/gixy/blob/master/docs/en/plugins/addheaderredefinition.md'
     directives = ['server', 'location', 'if']
     # headers: optional set/list/tuple of header names to scope reporting to
@@ -67,11 +57,6 @@ class add_header_redefinition(Plugin):
         if not actual_headers:
             return
 
-        # Check if add_header_inherit is enabled (nginx 1.29.3+)
-        # When enabled, headers are inherited from parent, so no warning needed
-        if has_header_inherit(directive):
-            return
-
         for parent in directive.parents:
             parent_headers = get_headers(parent)
             if not parent_headers:
@@ -110,27 +95,3 @@ def get_headers(directive):
         return set()
 
     return set(map(lambda d: d.header, headers))
-
-
-def has_header_inherit(directive):
-    """
-    Check if add_header_inherit is enabled in the directive.
-    
-    nginx 1.29.3+ supports 'add_header_inherit on;' which causes headers
-    to be inherited from parent levels, making the redefinition warning
-    unnecessary.
-    
-    The directive can be:
-    - add_header_inherit on;   -> headers are inherited
-    - add_header_inherit off;  -> default behavior (headers replaced)
-    """
-    inherit_directives = directive.find('add_header_inherit')
-    if not inherit_directives:
-        return False
-    
-    # Check if any add_header_inherit directive has 'on' as first arg
-    for d in inherit_directives:
-        if d.args and d.args[0].lower() == 'on':
-            return True
-    
-    return False
