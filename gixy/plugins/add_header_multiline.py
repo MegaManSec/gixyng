@@ -31,7 +31,7 @@ class add_header_multiline(Plugin):
             if "\n" in value:
                 reason = (
                     'A newline character is found in the directive "{directive}". The resulting header {header} will be '
-                    "incomplete. Ensure the value is fit on a single line".format(
+                    "incomplete. Ensure the value is fit on a single line or use variable nesting.".format(
                         directive=directive.name, header=header
                     )
                 )
