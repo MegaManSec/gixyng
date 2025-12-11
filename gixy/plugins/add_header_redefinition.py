@@ -4,10 +4,19 @@ from gixy.plugins.plugin import Plugin
 
 class add_header_redefinition(Plugin):
     """
-    Insecure example:
+    Insecure example (prior to nginx 1.29.3):
         server {
             add_header X-Content-Type-Options nosniff;
             location / {
+                add_header X-Frame-Options DENY;
+            }
+        }
+
+    Secure example (from nginx 1.29.3):
+        server {
+            add_header X-Content-Type-Options nosniff;
+            location / {
+                add_header_inherit on;
                 add_header X-Frame-Options DENY;
             }
         }
@@ -57,6 +66,9 @@ class add_header_redefinition(Plugin):
         if not actual_headers:
             return
 
+        if has_header_inherit(directive):
+            return
+
         for parent in directive.parents:
             parent_headers = get_headers(parent)
             if not parent_headers:
@@ -95,3 +107,18 @@ def get_headers(directive):
         return set()
 
     return set(map(lambda d: d.header, headers))
+
+def has_header_inherit(directive):
+    """
+    nginx 1.29.3+ supports 'add_header_inherit on;'
+    """
+    inherit_directives = directive.find('add_header_inherit')
+    if not inherit_directives:
+        return False
+
+    # Check if any add_header_inherit directive has 'on' as first arg
+    for d in inherit_directives:
+        if d.args and d.args[0].lower() == 'on':
+            return True
+
+    return False
