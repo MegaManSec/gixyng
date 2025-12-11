@@ -20,12 +20,6 @@ class allow_without_deny(Plugin):
         if directive.args == ['all']:
             # for example, "allow all" in a nested location which allows access to otherwise forbidden parent location
             return
-        # Includes are not a true context boundary. If the allow comes from an
-        # included file, climb to the real parent context (e.g., location/server).
-        while parent and getattr(parent, 'name', None) == 'include':
-            parent = parent.parent
-            if not parent:
-                return
 
         deny_found = False
         for child in parent.children:
