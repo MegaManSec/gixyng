@@ -45,11 +45,21 @@ class add_header_redefinition(Plugin):
             self.interesting_headers = set()
         # Define secure headers that should escalate severity
         self.secure_headers = [
-            'x-frame-options',
-            'x-content-type-options',
-            'x-xss-protection',
+            'cache-control',
             'content-security-policy',
-            'cache-control'
+            'cross-origin-embedder-policy',
+            'cross-origin-opener-policy',
+            'cross-origin-resource-policy',
+            'permissions-policy',
+            'referrer-policy',
+            'strict-transport-security',
+            'x-content-type-options',
+            'x-frame-options',
+            'x-xss-protection',
+            'expect-ct',
+            'pragma',
+            'expires',
+            'content-disposition'
         ]
 
     def audit(self, directive):
