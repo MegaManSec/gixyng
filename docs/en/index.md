@@ -3,10 +3,13 @@
 ## Overview
 <img align="right" width="192" height="192" src="https://gixy.io/imgs/gixy.jpg">
 
-The Gixy-ng scanner is a maintained fork of the original Gixy NGINX security scanner and configuration checker. Unlike the original Gixy scanner, Gixy-ng is actively maintained with bug fixes, new checks, and more features.
-NGINX configuration security scanning allows you to statically analyze your NGINX configuration to find security misconfigurations and vulnerabilities such as SSRF, HTTP response splitting, host header spoofing, and version disclosure before they reach production.
+Gixy-ng is an open source NGINX security scanner and configuration checker. It statically analyzes your NGINX configuration for security issues and misconfigurations before they reach production. Use Gixy-ng to run an automated NGINX configuration security audit and harden your nginx.conf against SSRF, HTTP response splitting, host header spoofing, version disclosure, and other vulnerabilities, as well as misconfigurations which lead to degraded performance and slow nginx servers.
 
 The main goal of Gixy-ng is to automate NGINX configuration security checks and prevent misconfiguration.
+
+### What is Gixy?
+
+Gixy is a popular NGINX configuration analyzer originally developed by Yandex. Gixy-ng is a maintained fork of Gixy that adds new checks, performance improvements, and support for modern Python and NGINX versions. If you are looking for an NGINX config scanner that is actively maintained, use Gixy-ng.
 
 ## What it can do
 
