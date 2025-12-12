@@ -1,5 +1,4 @@
-gixy-ng: NGINX security scanner and configuration checker
-===
+# gixy-ng: NGINX security scanner and configuration checker
 
 [![Mozilla Public License 2.0](https://img.shields.io/badge/license-MPLv2.0-brightgreen?style=flat-square)](https://github.com/megamansec/gixy-ng/blob/master/LICENSE)
 [![Python tests](https://github.com/megamansec/gixy-ng/actions/workflows/pythonpackage.yml/badge.svg)](https://github.com/megamansec/gixy-ng/actions/workflows/pythonpackage.yml)
@@ -7,7 +6,7 @@ gixy-ng: NGINX security scanner and configuration checker
 [![GitHub issues](https://img.shields.io/github/issues/megamansec/gixy-ng.svg?style=flat-square)](https://github.com/megamansec/gixy-ng/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/megamansec/gixy-ng.svg?style=flat-square)](https://github.com/megamansec/gixy-ng/pulls)
 
-# Overview
+## Overview
 <img align="right" width="192" height="192" src="/gixy.jpg">
 
 gixy-ng is a maintained fork of the original Gixy NGINX security scanner and configuration checker. It statically analyzes your NGINX configuration to find security misconfigurations and vulnerabilities such as SSRF, HTTP response splitting, host header spoofing, and version disclosure before they reach production.
@@ -23,7 +22,7 @@ Currently supported Python versions are 3.6 through 3.13.
 
 Disclaimer: Gixy is well tested only on GNU/Linux, other OSs may have some issues.
 
-# What it can do
+## What it can do
 
 Right now Gixy can find:
 
@@ -54,15 +53,15 @@ Right now Gixy can find:
 
 You can find things that Gixy is learning to detect at [Issues labeled with "new plugin"](https://github.com/megamansec/gixy-ng/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+plugin%22)
 
-# Installation
+## Installation
 
-## CentOS/RHEL and other RPM-based systems
+### CentOS/RHEL and other RPM-based systems
 
 ```bash
 yum -y install https://extras.getpagespeed.com/release-latest.rpm
 yum -y install gixy
 ```
-### Other systems
+#### Other systems
 
 Gixy is distributed on [PyPI](https://pypi.python.org/pypi/gixy-ng). The best way to install it is with pip:
 
@@ -70,7 +69,7 @@ Gixy is distributed on [PyPI](https://pypi.python.org/pypi/gixy-ng). The best wa
 pip install gixy-ng
 ```
 
-# Usage
+## Usage
 
 By default, gixy-ng (the `gixy` CLI) will try to analyze your NGINX configuration placed in `/etc/nginx/nginx.conf`.
 
@@ -120,7 +119,7 @@ Total issues:
 
 Or something else, you can find all other `gixy` arguments with the help command: `gixy --help`
 
-### Plugin options
+#### Plugin options
 
 Some plugins expose options which you can set via CLI flags or config file. CLI flags follow the pattern `--<PluginName>-<option>` with dashes, while config file uses `[PluginName]` sections with dashed keys.
 
@@ -148,7 +147,7 @@ You can also make `gixy` use pipes (stdin), like so:
 echo "resolver 1.1.1.1;" | gixy -
 ```
 
-## Docker usage
+### Docker usage
 Gixy is available as a Docker image [from the Docker hub](https://hub.docker.com/r/getpagespeed/gixy/). To
 use it, mount the configuration that you want to analyse as a volume and provide the path to the
 configuration file when running the Gixy image.
@@ -175,7 +174,7 @@ Total issues:
     High: 0
 
 ```
-## Kubernetes usage
+### Kubernetes usage
 Given you are using the official NGINX ingress controller, not the kubernetes one, you can use this
 https://github.com/nginx/kubernetes-ingress
 
@@ -223,7 +222,7 @@ Total issues:
 ```
 
 
-# Contributing
+## Contributing
 
 Contributions to gixy-ng are always welcome! You can help us in different ways:
   * Open an issue with suggestions for improvements and errors you're facing;
