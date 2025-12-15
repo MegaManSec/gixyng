@@ -1,69 +1,14 @@
-# Mkdocs documentation
-/site/
-# Byte-compiled / optimized / DLL files
+# Python bytecode / caches (covers all the __pycache__ dirs you listed)
 __pycache__/
 *.py[cod]
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-!rpm/*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
+# Tox
 .tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*,cover
-cover
 
-# Translations
-*.mo
-*.pot
+# Virtualenv-related stuff in this repo
+/bin/
+/lib/
+pyvenv.cfg
 
-# Django stuff:
-*.log
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-venv/
-venv3/
-.idea/
-=0.5.8
-
-# Cursor rules stored in private dotfiles
-.cursor/rules
+# Packaging metadata
+*.egg-info/
