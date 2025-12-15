@@ -7,7 +7,7 @@ description: "Open source NGINX security, hardening, and configuration complianc
 
 ## Overview
 
-<img width="192" height="192" alt="GixyNG Mascot Logo" style="float: right;" src="https://gixy.io/imgs/gixy.jpg">
+<img width="192" height="192" alt="GixyNG Mascot Logo" style="float: right;" align="right" src="https://gixy.io/imgs/gixy.jpg">
 
 GixyNG is an open source NGINX security scanner and configuration checker that analyzes your NGINX configuration for security issues, misconfigurations, and missed hardening opportunities, before they reach production. You can use GixyNG to run automated NGINX configuration security audits, and harden your nginx.conf against SSRF, HTTP response splitting, host header spoofing, version disclosure, and other vulnerabilities, as well as misconfigurations which lead to degraded performance and slow nginx servers.
 
@@ -48,15 +48,9 @@ Something not detected? Please open an [issues labeled with "new plugin"](https:
 
 ## Installation
 
-### CentOS/RHEL and other RPM-based systems
+### PyPI
 
-```bash
-yum -y install https://extras.getpagespeed.com/release-latest.rpm
-yum -y install gixy
-```
-#### Other systems
-
-Gixy is distributed on [PyPI](https://pypi.python.org/pypi/GixyNG). The best way to install it is with pip:
+GixyNG is distributed on [PyPI](https://pypi.python.org/pypi/GixyNG). The best way to install it is with pip:
 
 ```bash
 pip install GixyNG
@@ -114,7 +108,7 @@ Total issues:
 
 Or something else, you can find all other `gixy` arguments with the help command: `gixy --help`
 
-#### Plugin options
+### Plugin options
 
 Some plugins expose options which you can set via CLI flags or config file. CLI flags follow the pattern `--<PluginName>-<option>` with dashes, while config file uses `[PluginName]` sections with dashed keys.
 
@@ -143,43 +137,13 @@ You can also make `gixy` use pipes (stdin), like so:
 echo "resolver 1.1.1.1;" | gixy -
 ```
 
-### Docker usage
-GixyNG is available as a Docker image [from the Docker hub](https://hub.docker.com/r/getpagespeed/gixy/). To
-use it, mount the configuration that you want to analyse as a volume and provide the path to the
-configuration file when running the GixyNG image.
+## Kubernetes usage
 
-```
-$ docker run --rm -v `pwd`/nginx.conf:/etc/nginx/conf/nginx.conf getpagespeed/gixy /etc/nginx/conf/nginx.conf
-```
-
-If you have an image that already contains your nginx configuration, you can share the configuration
-with the GixyNG container as a volume.
-
-```
-$  docker run --rm --name nginx -d -v /etc/nginx
-nginx:alpinef68f2833e986ae69c0a5375f9980dc7a70684a6c233a9535c2a837189f14e905
-
-$  docker run --rm --volumes-from nginx megamansec/GixyNG /etc/nginx/nginx.conf
-
-==================== Results ===================
-No issues found.
-
-==================== Summary ===================
-Total issues:
-    Unspecified: 0
-    Low: 0
-    Medium: 0
-    High: 0
-
-```
-
-### Kubernetes usage
-
-Given you are using the official NGINX ingress controller, not the kubernetes one, you can use this
+If you are using the official NGINX ingress controller, not the kubernetes one, you can use this
 https://github.com/nginx/kubernetes-ingress
 
 ```
-kubectl exec -it my-release-nginx-ingress-controller-54d96cb5cd-pvhx5 -- /bin/bash -c "cat /etc/nginx/conf.d/*" | docker run -i getpagespeed/gixy -
+kubectl exec -it my-release-nginx-ingress-controller-54d96cb5cd-pvhx5 -- /bin/bash -c "cat /etc/nginx/conf.d/*" | gixy
 ```
 
 ```
