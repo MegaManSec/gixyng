@@ -9,55 +9,78 @@ description: "Open source NGINX security, hardening, and configuration complianc
 
 <a href="https://gixy.io/"><img width="192" height="192" alt="GixyNG Mascot Logo" style="float: right;" align="right" src="https://gixy.io/imgs/gixy.jpg" /></a>
 
+GixyNG is an open source NGINX security scanner and configuration hardening tool. It performs static analysis of your nginx.conf to identify security vulnerabilities, misconfigurations, and performance issues before they reach production. With GixyNG, you can run automated NGINX configuration security audits, uncover missed hardening opportunities, and prevent configuration mistakes that lead to slow or unstable NGINX servers.
 
-GixyNG is an open source NGINX configuration security scanner and hardening checker. It performs static analysis of your nginx.conf to detect security vulnerabilities, misconfigurations, and performance issues before they reach production.
+Currently supported Python versions are 3.6+.
 
-GixyNG is an open source NGINX security scanner and configuration checker that analyzes your NGINX configuration for security issues, misconfigurations, and missed hardening opportunities, before they reach production. You can use GixyNG to run automated NGINX configuration security audits, and harden your nginx.conf against security vulnerabilities, as well as misconfigurations which lead to degraded performance and slow nginx servers.
+Disclaimer: While GixyNG is well tested only on GNU/Linux, other OSs may have some issues. PRs and bug reports welcome.
 
-### What is Gixy?
+### Quick start
 
-_Gixy_ is an older NGINX configuration analyzer originally developed by Yandex. GixyNG is a maintained fork of Gixy that adds new checks, performance improvements, hardening suggestions, and support for modern Python and NGINX versions. If you are looking for an NGINX config scanner that is actively maintained and actually works now, use GixyNG.
+GixyNG is distributed on [PyPI](https://pypi.python.org/pypi/GixyNG). You can install it with pip or uv:
+
+```bash
+# pip
+pip install GixyNG
+
+# uv (recommended for CLIs: installs `gixy` on your PATH)
+uv tool install GixyNG
+
+# uv (pip-compatible: installs into the active virtual environment)
+uv pip install GixyNG
+```
+
+Alternatively, you can run it without installation:
+
+```bash
+# uvx runs the tool in an isolated temporary environment
+uvx --from GixyNG gixy /etc/nginx/nginx.conf
+```
+
+You can also export your NGINX configuration to a single dump-file:
+
+```bash
+# Dumps the full nginx configuration into a single file
+nginx -T | tee ./nginx-dump.conf
+```
+
+And then scan the dump-file elsewhere:
+
+```bash
+# Equivalent to scanning a full nginx configuration on a filesystem
+gixy ./nginx-dump.conf
+```
 
 ## What it can do
 
-GixyNG can can find various nginx configuration security issues, as well as nginx configuration performance issues, based on your `nginx.conf` and other nginx configuration files. The following plugins are supported to detect these misconfigurations
+GixyNG can find various nginx configuration security issues, as well as nginx configuration performance issues, based on your `nginx.conf` and other nginx configuration files. The following plugins are supported to detect these misconfigurations:
 
-*   [[add_header_content_type] Setting Content-Type via add_header](plugins/add_header_content_type.md)
-*   [[add_header_multiline] Multiline response headers](plugins/add_header_multiline.md)
-*   [[add_header_redefinition] Redefining of response headers by "add_header" directive](plugins/add_header_redefinition.md)
-*   [[alias_traversal] Path traversal via misconfigured alias](plugins/alias_traversal.md)
-*   [[allow_without_deny] Allow specified without deny](plugins/allow_without_deny.md)
-*   [[default_server_flag] Missing default_server flag](plugins/default_server_flag.md)
-*   [[error_log_off] `error_log` set to `off`](plugins/error_log_off.md)
-*   [[hash_without_default] Missing default in hash blocks](plugins/hash_without_default.md)
-*   [[host_spoofing] Request's Host header forgery](plugins/host_spoofing.md)
-*   [[http_splitting] HTTP Response Splitting](plugins/http_splitting.md)
-*   [[if_is_evil] If is evil when used in location context](plugins/if_is_evil.md)
-*   [[invalid_regex] Invalid regex capture groups](plugins/invalid_regex.md)
-*   [[low_keepalive_requests] Low `keepalive_requests`](plugins/low_keepalive_requests.md)
-*   [[origins] Problems with referer/origin header validation](plugins/origins.md)
-*   [[proxy_pass_normalized] `proxy_pass` path normalization issues](plugins/proxy_pass_normalized.md)
-*   [[regex_redos] Regular expression denial of service (ReDoS)](plugins/regex_redos.md)
-*   [[resolver_external] Using external DNS nameservers](plugins/resolver_external.md)
-*   [[return_bypasses_allow_deny] Return directive bypasses allow/deny restrictions](plugins/return_bypasses_allow_deny.md)
-*   [[ssrf] Server Side Request Forgery](plugins/ssrf.md)
-*   [[try_files_is_evil_too] `try_files` directive is evil without open_file_cache](plugins/try_files_is_evil_too.md)
-*   [[unanchored_regex] Unanchored regular expressions](plugins/unanchored_regex.md)
-*   [[valid_referers] none in valid_referers](plugins/valid_referers.md)
-*   [[version_disclosure] Using insecure values for server_tokens](plugins/version_disclosure.md)
-*   [[worker_rlimit_nofile_vs_connections] `worker_rlimit_nofile` must be at least twice `worker_connections`](plugins/worker_rlimit_nofile_vs_connections.md)
+*   [[add_header_content_type] Setting Content-Type via add_header](https://gixy.io/plugins/add_header_content_type)
+*   [[add_header_multiline] Multiline response headers](https://gixy.io/plugins/add_header_multiline)
+*   [[add_header_redefinition] Redefining of response headers by "add_header" directive](https://gixy.io/plugins/add_header_redefinition)
+*   [[alias_traversal] Path traversal via misconfigured alias](https://gixy.io/plugins/alias_traversal)
+*   [[allow_without_deny] Allow specified without deny](https://gixy.io/plugins/allow_without_deny)
+*   [[default_server_flag] Missing default_server flag](https://gixy.io/plugins/default_server_flag)
+*   [[error_log_off] `error_log` set to `off`](https://gixy.io/plugins/error_log_off)
+*   [[hash_without_default] Missing default in hash blocks](https://gixy.io/plugins/hash_without_default)
+*   [[host_spoofing] Request's Host header forgery](https://gixy.io/plugins/host_spoofing)
+*   [[http_splitting] HTTP Response Splitting](https://gixy.io/plugins/http_splitting)
+*   [[if_is_evil] If is evil when used in location context](https://gixy.io/plugins/if_is_evil)
+*   [[invalid_regex] Invalid regex capture groups](https://gixy.io/plugins/invalid_regex)
+*   [[low_keepalive_requests] Low `keepalive_requests`](https://gixy.io/plugins/low_keepalive_requests)
+*   [[origins] Problems with referer/origin header validation](https://gixy.io/plugins/origins)
+*   [[proxy_pass_normalized] `proxy_pass` path normalization issues](https://gixy.io/plugins/proxy_pass_normalized)
+*   [[regex_redos] Regular expression denial of service (ReDoS)](https://gixy.io/plugins/regex_redos)
+*   [[resolver_external] Using external DNS nameservers](https://gixy.io/plugins/resolver_external)
+*   [[return_bypasses_allow_deny] Return directive bypasses allow/deny restrictions](https://gixy.io/plugins/return_bypasses_allow_deny)
+*   [[ssrf] Server Side Request Forgery](https://gixy.io/plugins/ssrf)
+*   [[try_files_is_evil_too] `try_files` directive is evil without open_file_cache](https://gixy.io/plugins/try_files_is_evil_too)
+*   [[unanchored_regex] Unanchored regular expressions](https://gixy.io/plugins/unanchored_regex)
+*   [[valid_referers] none in valid_referers](https://gixy.io/plugins/valid_referers)
+*   [[version_disclosure] Using insecure values for server_tokens](https://gixy.io/plugins/version_disclosure)
+*   [[worker_rlimit_nofile_vs_connections] `worker_rlimit_nofile` must be at least twice `worker_connections`](https://gixy.io/plugins/worker_rlimit_nofile_vs_connections)
 
-Something not detected? Please open an [issue](https://github.com/megamansec/GixyNG/issues) on GitHub with what's missing!
-
-## Installation
-
-### PyPI
-
-GixyNG is distributed on [PyPI](https://pypi.python.org/pypi/GixyNG). The best way to install it is with pip:
-
-```bash
-pip install GixyNG
-```
+Something not detected? Please open an [issue](https://github.com/MegaManSec/GixyNG/issues) on GitHub with what's missing!
 
 ## Usage
 
@@ -140,62 +163,35 @@ You can also make `gixy` use pipes (stdin), like so:
 echo "resolver 1.1.1.1;" | gixy -
 ```
 
-## Kubernetes usage
+Here is a drop-in replacement that removes the Kubernetes section and explains the out-of-band `nginx -T` approach.
 
-If you are using the official NGINX ingress controller, not the kubernetes one, you can use this
-https://github.com/nginx/kubernetes-ingress
+### Out-of-band config dump scanning
 
-```
-kubectl exec -it my-release-nginx-ingress-controller-54d96cb5cd-pvhx5 -- /bin/bash -c "cat /etc/nginx/conf.d/*" | gixy
-```
+If you do not want to install and run GixyNG directly on the host running NGINX, you can dump the fully expanded NGINX configuration with `nginx -T` and scan that dump elsewhere.
 
-```
-==================== Results ===================
+`nginx -T` prints the complete configuration as NGINX sees it, including all `include` files, expanded in one stream. This makes it ideal for "out-of-band" scanning: export the config from production, then run GixyNG on it elsewhere.
 
->> Problem: [version_disclosure] Do not enable server_tokens on or server_tokens build
-Severity: HIGH
-Description: Using server_tokens on; or server_tokens build;  allows an attacker to learn the version of NGINX you are running, which can be used to exploit known vulnerabilities.
-Additional info: https://gixy.io/plugins/version_disclosure/
-Reason: Using server_tokens value which promotes information disclosure
-Pseudo config:
+On the system running NGINX, run:
 
-server {
-	server_name XXXXX.dev;
-	server_tokens on;
-}
-
-server {
-	server_name XXXXX.dev;
-	server_tokens on;
-}
-
-server {
-	server_name XXXXX.dev;
-	server_tokens on;
-}
-
-server {
-	server_name XXXXX.dev;
-	server_tokens on;
-}
-
-==================== Summary ===================
-Total issues:
-    Unspecified: 0
-    Low: 0
-    Medium: 0
-    High: 4
+```bash
+nginx -T | tee ./nginx-dump.conf
 ```
 
-## Why GixyNG is Essential for NGINX Security and Compliance
+Copy `nginx-dump.conf` to your scanning environment, then run:
 
-Unlike running `nginx -t`, which only checks syntax, GixyNG actually analyzes your configuration and detects unhardened instances, vulnerabilities, and vulnerabilities.
+```bash
+gixy ./nginx-dump.conf
+```
 
-With GixyNG, you can perform an automated NGINX configuration security reviewthat can run locally or in CI/CD on every change, whether that be for auditing purposes, compliance, or just general testing.
+## What is Gixy?
 
-Currently supported Python versions are 3.6 through 3.13.
+_Gixy_ is an older NGINX configuration analyzer originally developed by Yandex. GixyNG is a maintained fork of Gixy that adds new checks, performance improvements, hardening suggestions, and support for modern Python and NGINX versions. If you are looking for an NGINX config scanner that is actively maintained, use GixyNG.
 
-Disclaimer: While GixyNG is well tested only on GNU/Linux, other OSs may have some issues.
+## GixyNG for NGINX security and compliance
+
+Unlike running `nginx -t` which only checks syntax, GixyNG actually analyzes your configuration and detects unhardened instances and vulnerabilities.
+
+With GixyNG, you can perform an automated NGINX configuration security review that can run locally or in CI/CD on every change, whether that be for auditing purposes, compliance, or just general testing.
 
 ## Contributing
 
@@ -204,7 +200,7 @@ Contributions to GixyNG are always welcome! You can help us in different ways, s
 - Reporting bugs.
 - Suggesting new plugins for detection.
 - Improving documentation.
-- Fixing, refactoring, improving, and creating new, code.
+- Fixing, refactoring, improving, and writing new code.
 
 Before submitting any changes in pull requests, please read the contribution guideline document, [Contributing to GixyNG](https://gixy.io/contributing).
 
