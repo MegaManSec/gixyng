@@ -4,7 +4,10 @@ from gixy.core.variable import Variable
 from gixy.core.regexp import Regexp
 
 import ipaddress
- 
+import tldextract
+
+_TLD = tldextract.TLDExtract(include_psl_private_domains=False)
+
 def get_overrides():
     """Get a list of all directives that override the default behavior"""
     result = {}
@@ -277,17 +280,25 @@ class ResolverDirective(Directive):
     def get_external_nameservers(self):
         """Get a list of external nameservers used by the resolver directive"""
         external_nameservers = []
-        local_suffixes = (
-            ".intranet", ".internal", ".private", ".corp", ".home",
-            ".lan", ".local", ".localhost"
-        )
         for addr in self.addresses:
-            if any(addr.endswith(suffix) for suffix in local_suffixes):
+            ip_candidate = addr
+            if addr.startswith("[") and "]" in addr:
+                ip_candidate = addr.split("]")[0][1:] # [::1]:53 -> ::1
+            elif addr.count(":") == 1:
+                ip_candidate = addr.rsplit(":", 1)[0] # 1.2.3.4:53 -> 1.2.3.4 (or name:53 -> name)
+
+            if is_local_ipv4(addr) or is_local_ipv6(addr):
                 continue
-            if "." in addr and is_local_ipv4(addr):
+
+            try:
+                ipaddress.ip_address(ip_candidate) # is it even an ip address?
+            except ValueError:
+                host = ip_candidate.rstrip(".") # example.com. -> example.com
+                if not _TLD(host).top_domain_under_public_suffix:
+                    continue # Non-registerable domain
+                external_nameservers.append(addr)
                 continue
-            if ":" in addr and is_local_ipv6(addr):
-                continue
+
             external_nameservers.append(addr)
         return external_nameservers
 
