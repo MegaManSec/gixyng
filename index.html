@@ -1,0 +1,1618 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Open source NGINX security, hardening, and configuration compliance scanner for automating nginx.conf security audits, compliance checks, and hardening against misconfigurations.">
+      
+      
+      
+        <link rel="canonical" href="https://gixy.io/">
+      
+      
+      
+        <link rel="next" href="usage/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+  
+    
+      <title>GixyNG: NGINX Security, Hardening & Configuration Compliance Scanner</title>
+    
+  
+
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+
+  
+  <script type="application/ld+json">
+  
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "GixyNG",
+    "alternateName": [
+      "Gixy NGINX configuration checker",
+      "Gixy NGINX security hardening scanner",
+      "Gixy-ng NGINX config checker",
+      "Gixy NGINX configuration hardener",
+      "Gixy-ng NGINX configuration compliance checker"
+    ],
+    "operatingSystem": "Linux",
+    "applicationCategory": "SecurityApplication",
+    "description": "Open source NGINX security, hardening, and configuration compliance scanner that statically analyzes nginx.conf for security issues and misconfigurations.",
+    "url": "https://gixy.io/",
+    "downloadUrl": "https://pypi.org/project/GixyNG/",
+    "softwareVersion": "0.2.x",
+    "license": "https://www.mozilla.org/en-US/MPL/2.0/",
+    "author": {
+      "@type": "Person",
+      "name": "Joshua Rogers",
+      "url": "https://joshua.hu/",
+      "sameAs": [
+        "https://github.com/MegaManSec",
+        "https://www.linkedin.com/in/joshua-alexander-rogers/"
+      ]
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  }
+  
+  </script>
+  
+
+  <meta property="og:type" content="website">
+
+  
+    
+      <meta property="og:title" content="GixyNG: NGINX Security Scanner & Configuration Checker">
+    
+
+    
+      <meta property="og:url" content="https://gixy.io/">
+    
+
+    
+      <meta property="og:description" content="Open source NGINX security, hardening, and configuration compliance scanner for automating nginx.conf security audits, compliance checks, and hardening against misconfigurations.">
+    
+
+  
+
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GixyNG" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/web-app-manifest-512x512.png">
+
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gixyng-nginx-security-scanner-configuration-checker-for-security-audits" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="GixyNG: NGINX Configuration Security &amp; Hardening Checker" class="md-header__button md-logo" aria-label="GixyNG: NGINX Configuration Security & Hardening Checker" data-md-component="logo">
+      
+  <img src="imgs/gixy.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GixyNG: NGINX Configuration Security & Hardening Checker
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              NGINX Security Scanner
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/MegaManSec/GixyNG" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="GixyNG: NGINX Configuration Security &amp; Hardening Checker" class="md-nav__button md-logo" aria-label="GixyNG: NGINX Configuration Security & Hardening Checker" data-md-component="logo">
+      
+  <img src="imgs/gixy.png" alt="logo">
+
+    </a>
+    GixyNG: NGINX Configuration Security & Hardening Checker
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/MegaManSec/GixyNG" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NGINX Security Scanner
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NGINX Security Scanner
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick start
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-can-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it can do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage (flags)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-and-plugin-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration and plugin options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gixyng-for-nginx-security-and-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GixyNG for NGINX security and compliance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-gixy-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Gixy? (Background)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="variables-dropins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Variables & Drop-ins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugins
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plugins
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/add_header_content_type/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Duplicate Content-Type
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/add_header_multiline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multiline Response Headers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/add_header_redefinition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Header Inheritance Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/alias_traversal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alias Path Traversal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/allow_without_deny/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Allow Without Deny
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/default_server_flag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Missing default_server Flag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/error_log_off/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_log Set To Off
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/hash_without_default/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Map Default Value Missing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/host_spoofing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Host Header Spoofing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/http_splitting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP Response Splitting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/if_is_evil/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    If Is Evil (in Location)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/invalid_regex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Invalid Regex Captures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/low_keepalive_requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Keepalive Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/origins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Weak Referer/Origin Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/proxy_pass_normalized/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    proxy_pass Path Normalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/regex_redos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regex Denial of Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/resolver_external/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External DNS Resolvers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/return_bypasses_allow_deny/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Return Bypasses Allow/Deny
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/ssrf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Server Side Request Forgery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/try_files_is_evil_too/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Uncached try_files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/unanchored_regex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unanchored Regex Pattern
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/valid_referers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referer Check Bypass
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/version_disclosure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NGINX Version Disclosure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="plugins/worker_rlimit_nofile_vs_connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low worker_rlimit_nofile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing to GixyNG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick start
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-can-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it can do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage (flags)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-and-plugin-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration and plugin options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gixyng-for-nginx-security-and-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GixyNG for NGINX security and compliance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-gixy-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Gixy? (Background)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="gixyng-nginx-security-scanner-configuration-checker-for-security-audits">GixyNG: NGINX Security Scanner &amp; Configuration Checker for Security Audits<a class="headerlink" href="#gixyng-nginx-security-scanner-configuration-checker-for-security-audits" title="Permanent link">¤</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¤</a></h2>
+<p><a href="https://gixy.io/"><img width="192" height="192" alt="GixyNG Mascot Logo" style="float: right;" align="right" src="https://gixy.io/imgs/gixy.jpg" /></a></p>
+<p>GixyNG is an open source NGINX configuration security scanner and hardening tool that performs static analysis of your nginx.conf to detect security misconfigurations, hardening gaps, and common performance pitfalls before they reach production. Run it locally or in CI/CD to automate NGINX security audits and configuration compliance checks, producing actionable findings that help prevent unstable/slow NGINX servers, and reduce risk from unsafe directives and insecure defaults.</p>
+<h3 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">¤</a></h3>
+<p>GixyNG (the <code>gixy</code> CLI) is distributed on <a href="https://pypi.python.org/pypi/GixyNG">PyPI</a>. You can install it with pip or uv:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># pip</span>
+pip<span class="w"> </span>install<span class="w"> </span>GixyNG
+
+<span class="c1"># uv</span>
+uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>GixyNG
+</code></pre></div>
+<p>You can also export your NGINX configuration to a single dump file:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Dumps the full NGINX configuration into a single file (including all includes)</span>
+nginx<span class="w"> </span>-T<span class="w"> </span>&gt;<span class="w"> </span>./nginx-dump.conf
+</code></pre></div>
+<p>And then scan the dump file elsewhere (or via stdin):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Equivalent to scanning the full rendered configuration output.</span>
+gixy<span class="w"> </span>./nginx-dump.conf
+
+<span class="c1"># Equivalent to above</span>
+cat<span class="w"> </span>./nginx-dump.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>gixy<span class="w"> </span>-
+</code></pre></div>
+<h2 id="what-it-can-do">What it can do<a class="headerlink" href="#what-it-can-do" title="Permanent link">¤</a></h2>
+<p>GixyNG can detect a wide range of NGINX security and performance misconfigurations across <code>nginx.conf</code> and included configuration files. The following plugins are supported:</p>
+<ul>
+<li><a href="https://gixy.io/plugins/add_header_content_type/">[add_header_content_type] Setting Content-Type via add_header</a></li>
+<li><a href="https://gixy.io/plugins/add_header_multiline/">[add_header_multiline] Multiline response headers</a></li>
+<li><a href="https://gixy.io/plugins/add_header_redefinition/">[add_header_redefinition] Redefining of response headers by "add_header" directive</a></li>
+<li><a href="https://gixy.io/plugins/alias_traversal/">[alias_traversal] Path traversal via misconfigured alias</a></li>
+<li><a href="https://gixy.io/plugins/allow_without_deny/">[allow_without_deny] Allow specified without deny</a></li>
+<li><a href="https://gixy.io/plugins/default_server_flag/">[default_server_flag] Missing default_server flag</a></li>
+<li><a href="https://gixy.io/plugins/error_log_off/">[error_log_off] <code>error_log</code> set to <code>off</code></a></li>
+<li><a href="https://gixy.io/plugins/hash_without_default/">[hash_without_default] Missing default in hash blocks</a></li>
+<li><a href="https://gixy.io/plugins/host_spoofing/">[host_spoofing] Request's Host header forgery</a></li>
+<li><a href="https://gixy.io/plugins/http_splitting/">[http_splitting] HTTP Response Splitting</a></li>
+<li><a href="https://gixy.io/plugins/if_is_evil/">[if_is_evil] If is evil when used in location context</a></li>
+<li><a href="https://gixy.io/plugins/invalid_regex/">[invalid_regex] Invalid regex capture groups</a></li>
+<li><a href="https://gixy.io/plugins/low_keepalive_requests/">[low_keepalive_requests] Low <code>keepalive_requests</code></a></li>
+<li><a href="https://gixy.io/plugins/origins/">[origins] Problems with referer/origin header validation</a></li>
+<li><a href="https://gixy.io/plugins/proxy_pass_normalized/">[proxy_pass_normalized] <code>proxy_pass</code> path normalization issues</a></li>
+<li><a href="https://gixy.io/plugins/regex_redos/">[regex_redos] Regular expression denial of service (ReDoS)</a></li>
+<li><a href="https://gixy.io/plugins/resolver_external/">[resolver_external] Using external DNS nameservers</a></li>
+<li><a href="https://gixy.io/plugins/return_bypasses_allow_deny/">[return_bypasses_allow_deny] Return directive bypasses allow/deny restrictions</a></li>
+<li><a href="https://gixy.io/plugins/ssrf/">[ssrf] Server Side Request Forgery</a></li>
+<li><a href="https://gixy.io/plugins/try_files_is_evil_too/">[try_files_is_evil_too] <code>try_files</code> directive is evil without open_file_cache</a></li>
+<li><a href="https://gixy.io/plugins/unanchored_regex/">[unanchored_regex] Unanchored regular expressions</a></li>
+<li><a href="https://gixy.io/plugins/valid_referers/">[valid_referers] none in valid_referers</a></li>
+<li><a href="https://gixy.io/plugins/version_disclosure/">[version_disclosure] Using insecure values for server_tokens</a></li>
+<li><a href="https://gixy.io/plugins/worker_rlimit_nofile_vs_connections/">[worker_rlimit_nofile_vs_connections] <code>worker_rlimit_nofile</code> must be at least twice <code>worker_connections</code></a></li>
+</ul>
+<p>Something not detected? Please open an <a href="https://github.com/MegaManSec/GixyNG/issues">issue</a> on GitHub with what's missing!</p>
+<h2 id="usage-flags">Usage (flags)<a class="headerlink" href="#usage-flags" title="Permanent link">¤</a></h2>
+<p><code>gixy</code> defaults to reading a system's NGINX configuration from <code>/etc/nginx/nginx.conf</code>. You can also specify the location by passing it to <code>gixy</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Analyze the configuration in /opt/nginx.conf</span>
+gixy<span class="w"> </span>/opt/nginx.conf
+</code></pre></div>
+<p>You can run a focused subset of checks with <code>--tests</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Only run these checks</span>
+gixy<span class="w"> </span>--tests<span class="w"> </span>http_splitting,ssrf,version_disclosure
+</code></pre></div>
+<p>Or skip a few noisy checks with <code>--skips</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run everything except these checks</span>
+gixy<span class="w"> </span>--skips<span class="w"> </span>low_keepalive_requests,worker_rlimit_nofile_vs_connections
+</code></pre></div>
+<p>To only report issues of a certain severity or higher, use the compounding <code>-l</code> flag:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># -l for LOW severity issues and high, -ll for MEDIUM and higher, and -lll for only HIGH severity issues</span>
+gixy<span class="w"> </span>-ll
+</code></pre></div>
+<p>By default, the output of <code>gixy</code> is ANSI-colored; best viewed in an ANSI-compatible terminal. You can use the <code>--format</code> (<code>-f</code>) flag with the <code>text</code> value to get an uncolored output:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>gixy<span class="w"> </span>-f<span class="w"> </span><span class="nv">text</span>
+
+<span class="o">====================</span><span class="w"> </span><span class="nv">Results</span><span class="w"> </span><span class="o">===================</span>
+
+Problem:<span class="w"> </span><span class="o">[</span>http_splitting<span class="o">]</span><span class="w"> </span>Possible<span class="w"> </span>HTTP-Splitting<span class="w"> </span>vulnerability.
+Description:<span class="w"> </span>Using<span class="w"> </span>variables<span class="w"> </span>that<span class="w"> </span>can<span class="w"> </span>contain<span class="w"> </span><span class="s2">&quot;\n&quot;</span><span class="w"> </span>may<span class="w"> </span>lead<span class="w"> </span>to<span class="w"> </span>http<span class="w"> </span>injection.
+Additional<span class="w"> </span>info:<span class="w"> </span>https://gixy.io/plugins/http_splitting/
+Reason:<span class="w"> </span>At<span class="w"> </span>least<span class="w"> </span>variable<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$action</span><span class="s2">&quot;</span><span class="w"> </span>can<span class="w"> </span>contain<span class="w"> </span><span class="s2">&quot;\n&quot;</span>
+Pseudo<span class="w"> </span>config:
+include<span class="w"> </span>/etc/nginx/sites/default.conf<span class="p">;</span>
+
+<span class="w">    </span>server<span class="w"> </span><span class="o">{</span>
+
+<span class="w">        </span>location<span class="w"> </span>~<span class="w"> </span>/v1/<span class="o">((</span>?&lt;action&gt;<span class="o">[</span>^.<span class="o">]</span>*<span class="o">)</span><span class="se">\.</span>json<span class="o">)</span>?$<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span>add_header<span class="w"> </span>X-Action<span class="w"> </span><span class="nv">$action</span><span class="p">;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+
+
+<span class="o">====================</span><span class="w"> </span><span class="nv">Summary</span><span class="w"> </span><span class="o">===================</span>
+Total<span class="w"> </span>issues:
+<span class="w">    </span>Unspecified:<span class="w"> </span><span class="m">0</span>
+<span class="w">    </span>Low:<span class="w"> </span><span class="m">0</span>
+<span class="w">    </span>Medium:<span class="w"> </span><span class="m">0</span>
+<span class="w">    </span>High:<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<p>You can also use <code>-f json</code> to get a reproducible, machine-readable JSON output:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>gixy<span class="w"> </span>-f<span class="w"> </span>json
+<span class="o">[{</span><span class="s2">&quot;config&quot;</span>:<span class="s2">&quot;\nserver {\n\n\tlocation ~ /v1/((?&lt;action&gt;[^.]*)\\.json)?</span>$<span class="s2"> {\n\t\tadd_header X-Action </span><span class="nv">$action</span><span class="s2">;\n\t}\n}&quot;</span>,<span class="s2">&quot;description&quot;</span>:<span class="s2">&quot;Using variables that can contain \&quot;\\n\&quot; or \&quot;\\r\&quot; may lead to http injection.&quot;</span>,<span class="s2">&quot;file&quot;</span>:<span class="s2">&quot;/etc/nginx/nginx.conf&quot;</span>,<span class="s2">&quot;line&quot;</span>:4,<span class="s2">&quot;path&quot;</span>:<span class="s2">&quot;/etc/nginx/nginx.conf&quot;</span>,<span class="s2">&quot;plugin&quot;</span>:<span class="s2">&quot;http_splitting&quot;</span>,<span class="s2">&quot;reason&quot;</span>:<span class="s2">&quot;At least variable \&quot;</span><span class="nv">$action</span><span class="s2">\&quot; can contain \&quot;\\n\&quot;&quot;</span>,<span class="s2">&quot;reference&quot;</span>:<span class="s2">&quot;https://gixy.io/plugins/http_splitting/&quot;</span>,<span class="s2">&quot;severity&quot;</span>:<span class="s2">&quot;HIGH&quot;</span>,<span class="s2">&quot;summary&quot;</span>:<span class="s2">&quot;Possible HTTP-Splitting vulnerability.&quot;</span><span class="o">}]</span>
+</code></pre></div>
+<p>More flags for usage can be found by passing <code>--help</code> to <code>gixy</code>. You can also find more information in the <a href="https://gixy.io/usage/">Usage Guide</a>.</p>
+<h2 id="configuration-and-plugin-options">Configuration and plugin options<a class="headerlink" href="#configuration-and-plugin-options" title="Permanent link">¤</a></h2>
+<p>Some plugins expose options which you can set via CLI flags or a configuration file. You can read more about those in the <a href="https://gixy.io/configuration/">Configuration guide</a>.</p>
+<h2 id="gixyng-for-nginx-security-and-compliance">GixyNG for NGINX security and compliance<a class="headerlink" href="#gixyng-for-nginx-security-and-compliance" title="Permanent link">¤</a></h2>
+<p>Unlike running <code>nginx -t</code> which only checks syntax, GixyNG actually analyzes your configuration and detects unhardened instances and vulnerabilities.</p>
+<p>With GixyNG, you can perform an automated NGINX configuration security review that can run locally or in CI/CD on every change, whether that be for auditing purposes, compliance, or just general testing.</p>
+<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">¤</a></h2>
+<p>Contributions to GixyNG are always welcome! You can help us in different ways, such as:</p>
+<ul>
+<li>Reporting bugs.</li>
+<li>Suggesting new plugins for detection.</li>
+<li>Improving documentation.</li>
+<li>Fixing, refactoring, improving, and writing new code.</li>
+</ul>
+<p>Before submitting any changes in pull requests, please read the contribution guideline document, <a href="https://gixy.io/contributing/">Contributing to GixyNG</a>.</p>
+<p>The official homepage of GixyNG is <a href="https://gixy.io/">https://gixy.io/</a>. Any changes to documentation in GixyNG will automatically be reflected on that website.</p>
+<p>The source code can be found at <a href="https://github.com/MegaManSec/GixyNG">https://github.com/MegaManSec/GixyNG</a>.</p>
+<h2 id="what-is-gixy-background">What is Gixy? (Background)<a class="headerlink" href="#what-is-gixy-background" title="Permanent link">¤</a></h2>
+<p><em>Gixy</em> is an older NGINX configuration analyzer originally developed by Yandex. GixyNG is a maintained fork of Gixy that adds new checks, performance improvements, hardening suggestions, and support for modern Python and NGINX versions. If you are looking for an NGINX config scanner that is actively maintained, use GixyNG.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.expand"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="extra/redirect-en.js"></script>
+      
+    
+  </body>
+</html>

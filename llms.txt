@@ -1,0 +1,39 @@
+# GixyNG: NGINX Configuration Security & Hardening Checker
+
+> GixyNG is an open source NGINX security, hardening, and configuration compliance scanner. Run automated NGINX configuration security audits and compliance checks, find performance misconfigurations in nginx.conf, and harden your NGINX servers.
+
+The GixyNG security scanner and configuration checker statically analyzes NGINX configurations to find security issues, performance issues, and hardening opportunities before they reach production.
+
+## Overview and usage
+
+- [NGINX Security Scanner](https://gixy.io/index.md): Overview and quickstart
+- [Configuration Guide](https://gixy.io/configuration/index.md): Configuration and CLI usage
+- [Custom Variables & Drop-ins](https://gixy.io/variables-dropins/index.md): Variables and drop-in files
+
+## Built-in plugins
+
+- [Duplicate Content-Type](https://gixy.io/plugins/add_header_content_type/index.md): Scanning plugin
+- [Multiline Response Headers](https://gixy.io/plugins/add_header_multiline/index.md): Scanning plugin
+- [Header Inheritance Issues](https://gixy.io/plugins/add_header_redefinition/index.md): Scanning plugin
+- [Alias Path Traversal](https://gixy.io/plugins/alias_traversal/index.md): Scanning plugin
+- [Allow Without Deny](https://gixy.io/plugins/allow_without_deny/index.md): Scanning plugin
+- [Missing default_server Flag](https://gixy.io/plugins/default_server_flag/index.md): Scanning plugin
+- [error_log Set To Off](https://gixy.io/plugins/error_log_off/index.md): Scanning plugin
+- [Map Default Value Missing](https://gixy.io/plugins/hash_without_default/index.md): Scanning plugin
+- [Host Header Spoofing](https://gixy.io/plugins/host_spoofing/index.md): Scanning plugin
+- [HTTP Response Splitting](https://gixy.io/plugins/http_splitting/index.md): Scanning plugin
+- [If Is Evil (in Location)](https://gixy.io/plugins/if_is_evil/index.md): Scanning plugin
+- [Invalid Regex Captures](https://gixy.io/plugins/invalid_regex/index.md): Scanning plugin
+- [Low Keepalive Requests](https://gixy.io/plugins/low_keepalive_requests/index.md): Scanning plugin
+- [Weak Referer/Origin Validation](https://gixy.io/plugins/origins/index.md): Scanning plugin
+- [proxy_pass Path Normalization](https://gixy.io/plugins/proxy_pass_normalized/index.md): Scanning plugin
+- [Regex Denial of Service](https://gixy.io/plugins/regex_redos/index.md): Scanning plugin
+- [External DNS Resolvers](https://gixy.io/plugins/resolver_external/index.md): Scanning plugin
+- [Return Bypasses Allow/Deny](https://gixy.io/plugins/return_bypasses_allow_deny/index.md): Scanning plugin
+- [Server Side Request Forgery](https://gixy.io/plugins/ssrf/index.md): Scanning plugin
+- [Uncached try_files](https://gixy.io/plugins/try_files_is_evil_too/index.md): Scanning plugin
+- [Unanchored Regex Pattern](https://gixy.io/plugins/unanchored_regex/index.md): Scanning plugin
+- [Referer Check Bypass](https://gixy.io/plugins/valid_referers/index.md): Scanning plugin
+- [NGINX Version Disclosure](https://gixy.io/plugins/version_disclosure/index.md): Scanning plugin
+- [Low worker_rlimit_nofile](https://gixy.io/plugins/worker_rlimit_nofile_vs_connections/index.md): Scanning plugin
+

@@ -1,0 +1,32 @@
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+    height: 2.2rem !important;
+    width: auto !important;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+}
+.md-nav__title[for="__drawer"] {
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+@media screen and (max-width: 76.2344em) {
+  .md-nav--primary .md-nav__title .md-logo {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    position: absolute;
+    left: .2rem;
+    right: .2rem;
+    top: .2rem;
+    bottom: .2rem;
+    margin: .2rem;
+    padding: .4rem;
+  }
+}
+
+@media screen and (max-width: 76.2344em) {
+  .md-nav--primary .md-nav__title {
+    height: 0 !important;
+  }
+}
