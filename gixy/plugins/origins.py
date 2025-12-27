@@ -7,7 +7,7 @@ from gixy.directives.directive import MapDirective, AddHeaderDirective
 from urllib.parse import urlparse
 import tldextract
 
-_EXTRACT = tldextract.TLDExtract(include_psl_private_domains=True) # include private domains, because we only care about origin; not domain ownership
+_EXTRACT = tldextract.TLDExtract(include_psl_private_domains=True, suffix_list_urls=()) # include private domains, because we only care about origin; not domain ownership
 
 class origins(Plugin):
     r"""
@@ -101,8 +101,14 @@ class origins(Plugin):
         if i == j:
             return True
 
-        ei = self.extract(i).top_domain_under_public_suffix or None
-        ej = self.extract(j).top_domain_under_public_suffix or None
+        xi = self.extract(i)
+        xj = self.extract(j)
+
+        ei = (getattr(xi, "top_domain_under_public_suffix", None) or
+              getattr(xi, "registered_domain", None) or None)
+        ej = (getattr(xj, "top_domain_under_public_suffix", None) or
+              getattr(xj, "registered_domain", None) or None)
+
         return ei is not None and ei == ej
 
     def parse_url(self, url):

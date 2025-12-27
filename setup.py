@@ -28,7 +28,10 @@ install_requires = [
     'argparse>=1.4.0;python_version<"3.2"',
     "Jinja2>=2.8",
     "ConfigArgParse>=0.11.0",
-    "publicsuffixlist>=1.0.2.20250428",
+    'tldextract==3.1.2; python_version>="3.6" and python_version<"3.7"',
+    'tldextract==4.0.0; python_version>="3.7" and python_version<"3.8"',
+    'tldextract>=5.1.2,<5.3.0; python_version>="3.8" and python_version<"3.9"',
+    'tldextract>=5.3.0; python_version>="3.9"',
 ]
 
 tests_requires = [

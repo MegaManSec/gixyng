@@ -6,7 +6,7 @@ from gixy.core.regexp import Regexp
 import ipaddress
 import tldextract
 
-_TLD = tldextract.TLDExtract(include_psl_private_domains=False)
+_TLD = tldextract.TLDExtract(include_psl_private_domains=False, suffix_list_urls=())
 
 def get_overrides():
     """Get a list of all directives that override the default behavior"""
@@ -294,8 +294,8 @@ class ResolverDirective(Directive):
                 ipaddress.ip_address(ip_candidate) # is it even an ip address?
             except ValueError:
                 host = ip_candidate.rstrip(".") # example.com. -> example.com
-                if not _TLD(host).top_domain_under_public_suffix:
-                    continue # Non-registerable domain
+                if not _TLD(host).suffix:
+                    continue # Non-registerable hostname
                 external_nameservers.append(addr)
                 continue
 
